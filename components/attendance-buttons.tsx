@@ -1,0 +1,112 @@
+"use client";
+
+export default function AttendanceButtons({
+  studentId,
+  sessionId,
+}: {
+  studentId: string;
+  sessionId: string;
+}) {
+  async function markAttendance(
+    status: string
+  ) {
+    const res = await fetch(
+      "/api/attendance",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
+          studentId,
+          sessionId,
+          status,
+        }),
+      }
+    );
+
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      alert("Failed");
+    }
+
+
+  }
+  
+  async function markCheck(
+    type: "checkin" | "checkout"
+  ) {
+    const res = await fetch(
+      "/api/attendance/check",
+      {
+        method: "POST",
+  
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+  
+        body: JSON.stringify({
+          studentId,
+          sessionId,
+          type,
+        }),
+      }
+    );
+  
+    if (res.ok) {
+      window.location.reload();
+    }
+  }
+
+  return (
+    <div className="mt-3 flex gap-2">
+      <button
+        onClick={() =>
+          markAttendance("PRESENT")
+        }
+        className="rounded bg-green-600 px-3 py-1 text-white"
+      >
+        Present
+      </button>
+
+      <button
+        onClick={() =>
+          markAttendance("ABSENT")
+        }
+        className="rounded bg-red-600 px-3 py-1 text-white"
+      >
+        Absent
+      </button>
+
+      <button
+        onClick={() =>
+          markAttendance("LATE")
+        }
+        className="rounded bg-yellow-600 px-3 py-1 text-white"
+      >
+        Late
+      </button>
+
+      <button
+        onClick={() =>
+          markCheck("checkin")
+        }
+        className="rounded bg-blue-600 px-3 py-1 text-white"
+      >
+        Check In
+      </button>
+
+      <button
+        onClick={() =>
+          markCheck("checkout")
+        }
+        className="rounded bg-purple-600 px-3 py-1 text-white"
+      >
+        Check Out
+      </button>
+    </div>
+  );
+}

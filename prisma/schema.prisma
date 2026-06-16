@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String           @id @default(cuid())
+  email             String           @unique
+  passwordHash      String
+  firstName         String
+  lastName          String
+  phone             String?
+  role              Role
+  isActive          Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  emailVerified     Boolean          @default(false)
+  editedAttendances Attendance[]     @relation("AttendanceEditor")
+  teachingCourses   CourseTeacher[]
+  uploadedFiles     EvaluationFile[]
+  receivedMessages  Message[]        @relation("MessageReceiver")
+  sentMessages      Message[]        @relation("MessageSender")
+  notifications     Notification[]
+  children          StudentProfile[] @relation("ParentStudents")
+  studentProfile    StudentProfile?
+  teacherComments   TeacherComment[] @relation("TeacherComments")
+}
+
+model StudentProfile {
+  id               String    @id @default(cuid())
+  studentUserId    String    @unique
+  parentId         String
+  dateOfBirth      DateTime?
+  notes            String?
+  emergencyContact String?
+  medicalNotes     String?
+
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  attendance    Attendance[]
+  files         EvaluationFile[]
+  registrations Registration[]
+  parent        User             @relation("ParentStudents", fields: [parentId], references: [id])
+  studentUser   User             @relation(fields: [studentUserId], references: [id])
+  comments      TeacherComment[]
+}
+
+model Course {
+  id          String @id @default(cuid())
+
+  title       String
+  description String?
+  category    String
+  price       Float
+
+  location    String?
+  isActive    Boolean @default(true)
+
+  capacity    Int?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sessions    CourseSession[]
+  teachers    CourseTeacher[]
+}
+
+model CourseTeacher {
+  id        String @id @default(cuid())
+  courseId  String
+  teacherId String
+  course    Course @relation(fields: [courseId], references: [id])
+  teacher   User   @relation(fields: [teacherId], references: [id])
+
+  @@unique([courseId, teacherId])
+}
+
+model CourseSession {
+  id            String         @id @default(cuid())
+  courseId      String
+  startTime     DateTime
+  endTime       DateTime
+  notes         String?
+  room          String?
+  createdAt     DateTime       @default(now())
+  attendance    Attendance[]
+  course        Course         @relation(fields: [courseId], references: [id])
+  registrations Registration[]
+}
+
+model Registration {
+  id           String             @id @default(cuid())
+  studentId    String
+  sessionId    String
+  status       RegistrationStatus @default(PENDING)
+  cancelReason String?
+  createdAt    DateTime           @default(now())
+  payment      Payment?
+  session      CourseSession      @relation(fields: [sessionId], references: [id])
+  student      StudentProfile     @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, sessionId])
+}
+
+model Attendance {
+  id        String           @id @default(cuid())
+  studentId String
+  sessionId String
+  status    AttendanceStatus @default(ABSENT)
+
+  checkInTime   DateTime?
+  checkOutTime  DateTime?
+  arrivalNote   String?
+  departureNote String?
+
+  editedById String?
+  createdAt  DateTime       @default(now())
+  editedBy   User?          @relation("AttendanceEditor", fields: [editedById], references: [id])
+  session    CourseSession  @relation(fields: [sessionId], references: [id])
+  student    StudentProfile @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, sessionId])
+}
+
+model TeacherComment {
+  id        String         @id @default(cuid())
+  studentId String
+  teacherId String
+  comment   String
+  createdAt DateTime       @default(now())
+  student   StudentProfile @relation(fields: [studentId], references: [id])
+  teacher   User           @relation("TeacherComments", fields: [teacherId], references: [id])
+}
+
+model EvaluationFile {
+  id           String         @id @default(cuid())
+  studentId    String
+  uploadedById String
+  fileName     String
+  fileUrl      String
+  fileType     String
+  createdAt    DateTime       @default(now())
+  student      StudentProfile @relation(fields: [studentId], references: [id])
+  uploadedBy   User           @relation(fields: [uploadedById], references: [id])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  receiver   User     @relation("MessageReceiver", fields: [receiverId], references: [id])
+  sender     User     @relation("MessageSender", fields: [senderId], references: [id])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  registrationId String        @unique
+  amount         Float
+  status         PaymentStatus @default(UNPAID)
+  paidAt         DateTime?
+  createdAt      DateTime      @default(now())
+  registration   Registration  @relation(fields: [registrationId], references: [id])
+}
+
+enum Role {
+  PARENT
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  CANCELLED
+  REJECTED
+  WAITLISTED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+}
+
+enum NotificationType {
+  EMAIL
+  SMS
+  MESSAGE
+  REGISTRATION
+  PAYMENT
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
