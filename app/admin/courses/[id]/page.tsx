@@ -9,17 +9,14 @@ export default async function CourseDetailPage({
 }) {
   const { id } = await params;
 
-  const [course, teachers,students] = await Promise.all([
+  const [course, teachers, students] = await Promise.all([
     prisma.course.findUnique({
       where: { id },
       include: {
-        teachers: {
-          include: {
-            teacher: true,
-          },
-        },
+        category: true,
         sessions: {
           include: {
+            teacher: true,
             registrations: {
               include: {
                 student: {
@@ -61,61 +58,12 @@ export default async function CourseDetailPage({
       </h1>
 
       <p className="mt-2">
-        Category: {course.category}
+        Category: {course.category?.name ?? "Uncategorized"}
       </p>
 
       <p>Price: ${course.price}</p>
 
       <p>Location: {course.location}</p>
-
-      <div className="mt-6 rounded border p-4">
-        <h2 className="text-xl font-semibold">
-          Assigned Teachers
-        </h2>
-
-        <form
-          action={`/api/courses/${id}/teachers`}
-          method="POST"
-          className="mt-4 flex gap-2"
-        >
-          <select
-            name="teacherId"
-            className="rounded border p-2"
-          >
-            {teachers.map((teacher) => (
-              <option
-                key={teacher.id}
-                value={teacher.id}
-              >
-                {teacher.firstName}{" "}
-                {teacher.lastName}
-              </option>
-            ))}
-          </select>
-
-          <button
-            className="rounded bg-blue-600 px-3 py-2 text-white"
-            type="submit"
-          >
-            Assign Teacher
-          </button>
-        </form>
-
-        {course.teachers.length === 0 ? (
-          <p className="mt-4">
-            No teachers assigned.
-          </p>
-        ) : (
-          <ul className="mt-4 list-disc ml-6">
-            {course.teachers.map((t) => (
-              <li key={t.id}>
-                {t.teacher.firstName}{" "}
-                {t.teacher.lastName}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
 
       <div className="mt-6 rounded border p-4">
   <h2 className="text-xl font-semibold">
@@ -158,6 +106,23 @@ export default async function CourseDetailPage({
       />
     </div>
 
+    <div>
+      <label>Teacher</label>
+
+      <select
+        name="teacherId"
+        className="w-full rounded border p-2"
+        defaultValue=""
+      >
+        <option value="">Unassigned</option>
+        {teachers.map((teacher) => (
+          <option key={teacher.id} value={teacher.id}>
+            {teacher.firstName} {teacher.lastName}
+          </option>
+        ))}
+      </select>
+    </div>
+
     <button
       className="rounded bg-green-600 px-3 py-2 text-white"
       type="submit"
@@ -193,6 +158,39 @@ export default async function CourseDetailPage({
               {" "}
               {session.room ?? "N/A"}
             </div>
+
+            <form
+              action={`/api/sessions/${session.id}/teacher`}
+              method="POST"
+              className="mt-3 flex gap-2"
+            >
+              <select
+                name="teacherId"
+                className="rounded border p-2"
+                defaultValue={session.teacherId ?? ""}
+              >
+                <option value="">Unassigned</option>
+                {teachers.map((teacher) => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.firstName} {teacher.lastName}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                className="rounded bg-blue-600 px-3 py-2 text-white"
+                type="submit"
+              >
+                Assign Teacher
+              </button>
+            </form>
+
+            <p className="mt-2 text-sm text-gray-500">
+              Current teacher:{" "}
+              {session.teacher
+                ? `${session.teacher.firstName} ${session.teacher.lastName}`
+                : "Unassigned"}
+            </p>
 
             <form
               action={`/api/sessions/${session.id}/register`}

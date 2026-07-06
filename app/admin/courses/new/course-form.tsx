@@ -3,13 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function NewCoursePage() {
+export default function NewCoursePage({
+  categories,
+}: {
+  categories: Array<{
+    id: string;
+    name: string;
+  }>;
+}) {
   const router = useRouter();
 
   const [form, setForm] = useState({
     title: "",
     description: "",
-    category: "",
+    categoryId: "",
     price: "",
     location: "",
     capacity: "",
@@ -71,18 +78,26 @@ export default function NewCoursePage() {
           }
         />
 
-        <input
+        <select
           className="w-full border p-2 rounded"
-          placeholder="Category"
-          value={form.category}
+          value={form.categoryId}
           onChange={(e) =>
             setForm({
               ...form,
-              category: e.target.value,
+              categoryId: e.target.value,
             })
           }
           required
-        />
+        >
+          <option value="" disabled>
+            Select a category
+          </option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         
         <input
           type="number"

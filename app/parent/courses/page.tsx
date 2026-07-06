@@ -9,6 +9,7 @@ export default async function ParentCoursesPage() {
     },
 
     include: {
+      category: true,
       sessions: {
         include: {
           registrations: {
@@ -44,7 +45,7 @@ export default async function ParentCoursesPage() {
             <p>{course.description}</p>
 
             <p className="mt-2">
-              Category: {course.category}
+              Category: {course.category?.name ?? "Uncategorized"}
             </p>
 
             <p>

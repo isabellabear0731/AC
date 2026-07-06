@@ -1,19 +1,14 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/logout-button";
 import Link from "next/link";
+
+import LogoutButton from "@/components/logout-button";
 import NotificationBell from "@/components/notification-bell";
 
 export default async function AdminDashboard() {
-  const session = await getServerSession(authOptions);
-
-  <Link
-  href="/admin/users"
-  className="rounded border p-4"
-  >
-  User Management
-  </Link>
+  const session =
+    await getServerSession(authOptions);
 
   if (!session) {
     redirect("/login");
@@ -24,77 +19,161 @@ export default async function AdminDashboard() {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">
-        Admin Dashboard
-      </h1>
+    <div
+      className="min-h-screen p-8"
+      style={{
+        background: "#F8F8F3",
+      }}
+    >
+      {/* Welcome Card */}
 
-      <p>Welcome, {session.user.email}</p>
+      <div
+        className="mb-8 rounded-3xl p-8 shadow-sm"
+        style={{
+          background: "#FFFFFF",
+          border: "1px solid #D0CCCD",
+        }}
+      >
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800">
+              Admin Dashboard
+            </h1>
 
-      <div className="flex items-center gap-4">
-        <NotificationBell />
-        <LogoutButton />
+            <p className="mt-3 text-lg text-gray-600">
+              Welcome back,
+              {" "}
+              {session.user.email}
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500">
+              System Status:
+              {" "}
+              <span className="font-medium text-green-600">
+                All services operational
+              </span>
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <NotificationBell />
+            <LogoutButton />
+          </div>
+        </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <a
-          href="/admin/users"
-          className="rounded border p-4"
-        >
-          User Management
-        </a>
+      {/* Management */}
 
-        <a
-          href="/courses"
-          className="rounded border p-4"
+      <h2 className="mb-4 text-xl font-semibold text-gray-700">
+        Management
+      </h2>
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+        <Link
+          href="/admin/users"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
         >
-          Courses
-        </a>
+          <h3 className="text-xl font-semibold">
+            User Management
+          </h3>
+
+          <p className="mt-2 text-gray-500">
+            Create, edit and manage
+            user accounts.
+          </p>
+        </Link>
+
+        <Link
+          href="/courses"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
+        >
+          <h3 className="text-xl font-semibold">
+            Courses
+          </h3>
+
+          <p className="mt-2 text-gray-500">
+            Manage courses,
+            sessions and teachers.
+          </p>
+        </Link>
+
+        <Link
+          href="/admin/categories"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
+        >
+          <h3 className="text-xl font-semibold">
+            Course Categories
+          </h3>
+
+          <p className="mt-2 text-gray-500">
+            Create and manage course
+            categories.
+          </p>
+        </Link>
 
         <Link
           href="/calendar"
-          className="rounded border p-4 hover:bg-gray-50"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
         >
-          <h2 className="font-semibold">Calendar</h2>
-          <p>View all scheduled sessions</p>
+          <h3 className="text-xl font-semibold">
+            Calendar
+          </h3>
+
+          <p className="mt-2 text-gray-500">
+            View the center schedule.
+          </p>
+        </Link>
+
+      </div>
+
+      {/* Operations */}
+
+      <h2 className="mb-4 mt-10 text-xl font-semibold text-gray-700">
+        Operations
+      </h2>
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+        <Link
+          href="/admin/registrations"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
+        >
+          <h3 className="text-xl font-semibold">
+            Registration Queue
+          </h3>
+
+          <p className="mt-2 text-gray-500">
+            Review pending
+            registrations.
+          </p>
         </Link>
 
         <Link
           href="/admin/payments"
-          className="rounded-xl border p-6 hover:bg-gray-50"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
         >
-          <h2 className="font-semibold">
+          <h3 className="text-xl font-semibold">
             Payments
-          </h2>
+          </h3>
 
-          <p>
-            Manage invoices and payments
+          <p className="mt-2 text-gray-500">
+            Manage invoices and
+            payment status.
           </p>
         </Link>
 
         <Link
           href="/messages"
-          className="rounded border p-4 hover:bg-gray-50"
+          className="rounded-2xl border bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
         >
-          <h2 className="font-semibold">
+          <h3 className="text-xl font-semibold">
             Messages
-          </h2>
+          </h3>
 
-          <p>
-            View your inbox
-          </p>
-        </Link>
-
-        <Link
-          href="/admin/registrations"
-          className="rounded-xl border p-4 hover:bg-gray-50"
-        >
-          <h2 className="font-semibold">
-            Registration Queue
-          </h2>
-
-          <p>
-            Review pending enrollments
+          <p className="mt-2 text-gray-500">
+            View and reply to
+            messages.
           </p>
         </Link>
 
@@ -102,4 +181,3 @@ export default async function AdminDashboard() {
     </div>
   );
 }
-

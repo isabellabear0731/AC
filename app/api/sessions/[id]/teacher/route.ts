@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
+  const authSession = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "ADMIN") {
+  if (!authSession || authSession.user.role !== "ADMIN") {
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 401 }
@@ -17,30 +17,9 @@ export async function POST(
   }
 
   const { id } = await params;
-
   const formData = await req.formData();
-
-  const startTime = formData
-    .get("startTime")
-    ?.toString();
-
-  const endTime = formData
-    .get("endTime")
-    ?.toString();
-
-  const room = formData
-    .get("room")
-    ?.toString();
-
   const teacherId =
     formData.get("teacherId")?.toString() || null;
-
-  if (!startTime || !endTime) {
-    return NextResponse.json(
-      { error: "Missing times" },
-      { status: 400 }
-    );
-  }
 
   if (teacherId) {
     const teacher = await prisma.user.findFirst({
@@ -62,19 +41,21 @@ export async function POST(
     }
   }
 
-  await prisma.courseSession.create({
+  const courseSession = await prisma.courseSession.update({
+    where: {
+      id,
+    },
     data: {
-      courseId: id,
-      startTime: new Date(startTime),
-      endTime: new Date(endTime),
-      room,
       teacherId,
+    },
+    select: {
+      courseId: true,
     },
   });
 
   return NextResponse.redirect(
     new URL(
-      `/admin/courses/${id}`,
+      `/admin/courses/${courseSession.courseId}`,
       req.url
     )
   );

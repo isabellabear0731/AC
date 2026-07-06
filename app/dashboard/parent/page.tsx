@@ -2,9 +2,23 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
+
 import LogoutButton from "@/components/logout-button";
 import NotificationBell from "@/components/notification-bell";
+
+import PageContainer from "@/components/ui/PageContainer";
+import DashboardHero from "@/components/ui/DashboardHero";
+import DashboardSection from "@/components/ui/DashboardSection";
+import QuickActionCard from "@/components/ui/QuickActionCard";
+
+import { roleTheme } from "@/lib/theme";
+import {
+  Calendar,
+  BookOpen,
+  CreditCard,
+  MessageCircle,
+  User,
+} from "lucide-react";
 
 export default async function ParentDashboard() {
   const session =
@@ -33,90 +47,91 @@ export default async function ParentDashboard() {
       },
     });
 
+  const firstName =
+    parent?.firstName ??
+    session.user.name ??
+    "Parent";
+
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">
-        Parent Dashboard
-      </h1>
+    <PageContainer>
+      <DashboardHero
+        title={`Welcome back, ${firstName} 👋`}
+        subtitle="Stay connected with your child's learning journey."
+        accent={roleTheme.parent}
+      >
+        <div className="flex items-center gap-4">
+          <NotificationBell />
+          <LogoutButton />
+        </div>
+      </DashboardHero>
 
-      <p className="mt-2">
-        Welcome, {session.user.name}
-      </p>
+      <DashboardSection title="My Children">
+        <div className="grid gap-6 md:grid-cols-2">
+          {parent?.children.map((child) => (
+            <QuickActionCard
+              key={child.id}
+              href={`/parent/children/${child.id}`}
+              icon={User}
+              title={`${child.studentUser.firstName} ${child.studentUser.lastName}`}
+              description="View schedule, attendance and progress"
+            />
+          ))}
+        </div>
+      </DashboardSection>
 
-      <div className="flex items-center gap-4">
-        <NotificationBell />
-        <LogoutButton />
-      </div>
+      <DashboardSection title="Family Services">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <QuickActionCard
+            href="/parent/calendar"
+            icon={Calendar}
+            title="Family Calendar"
+            description="View upcoming classes and events"
+          />
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {parent?.children.map((child) => (
-          <Link
-            key={child.id}
-            href={`/parent/children/${child.id}`}
-            className="rounded-xl border p-6 hover:bg-gray-50 transition"
-          >
-            <h2 className="text-2xl font-semibold">
-              {child.studentUser.firstName}{" "}
-              {child.studentUser.lastName}
-            </h2>
+          <QuickActionCard
+            href="/parent/courses"
+            icon={BookOpen}
+            title="Browse Courses"
+            description="Register for available courses"
+          />
 
-            <p className="text-gray-500 mt-2">
-              View schedule and attendance
+          <QuickActionCard
+            href="/parent/payments"
+            icon={CreditCard}
+            title="Payments"
+            description="View invoices and payment status"
+          />
+
+          <QuickActionCard
+            href="/messages"
+            icon={MessageCircle}
+            title="Messages"
+            description="Communicate with teachers and staff"
+          />
+        </div>
+      </DashboardSection>
+
+      <DashboardSection title="Center Services">
+        <div className="rounded-2xl border bg-white p-6">
+          <h3 className="text-lg font-semibold">
+            📢 Announcements
+          </h3>
+
+          <div className="mt-4 space-y-3 text-gray-600">
+            <p>
+              • Welcome to the Autism Center Parent Portal.
             </p>
-          </Link>
-        ))}
 
-        <Link
-          href="/parent/calendar"
-          className="rounded-xl border p-6 hover:bg-gray-50 transition"
-        >
-          <h2 className="text-2xl font-semibold">
-            Family Calendar
-          </h2>
+            <p>
+              • New course registrations are now open.
+            </p>
 
-          <p className="text-gray-500 mt-2">
-            View all upcoming sessions
-          </p>
-        </Link>
-
-
-        <Link
-          href="/messages"
-          className="rounded border p-4 hover:bg-gray-50"
-        >
-          <h2 className="font-semibold">
-            Messages
-          </h2>
-
-
-          <p>
-            View your inbox
-          </p>
-        </Link>
-
-        <Link href="/parent/courses"
-          className="rounded border p-4 hover:bg-gray-50">
-            <h2 className="text-2xl font-semibold">
-            Browse Courses
-          </h2>
-          <p className="text-gray-500 mt-2">
-            Register for courses
-          </p>
-        </Link>
-
-        <Link
-          href="/parent/payments"
-          className="rounded-xl border p-6 hover:bg-gray-50"
-        >
-          <h2 className="font-semibold">
-            Payments
-          </h2>
-
-          <p>
-            View invoices and payment status
-          </p>
-        </Link>
-      </div>
-    </div>
+            <p>
+              • Upcoming center events will appear here.
+            </p>
+          </div>
+        </div>
+      </DashboardSection>
+    </PageContainer>
   );
 }

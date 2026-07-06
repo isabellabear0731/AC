@@ -39,9 +39,12 @@ export default async function UserDetailPage({
         },
       },
   
-      teachingCourses: {
+      teachingSessions: {
         include: {
           course: true,
+        },
+        orderBy: {
+          startTime: "asc",
         },
       },
     },
@@ -117,16 +120,18 @@ export default async function UserDetailPage({
       {user.role === "TEACHER" && (
         <div className="mt-8 rounded border p-4">
           <h2 className="text-xl font-bold mb-3">
-            Assigned Courses
+            Assigned Sessions
           </h2>
 
-          {user.teachingCourses.length === 0 ? (
-            <p>No courses assigned.</p>
+          {user.teachingSessions.length === 0 ? (
+            <p>No sessions assigned.</p>
           ) : (
             <ul className="list-disc ml-6">
-              {user.teachingCourses.map((tc) => (
-                <li key={tc.id}>
-                  {tc.course.title}
+              {user.teachingSessions.map((teachingSession) => (
+                <li key={teachingSession.id}>
+                  {teachingSession.course.title}
+                  {" — "}
+                  {teachingSession.startTime.toLocaleString()}
                 </li>
               ))}
             </ul>

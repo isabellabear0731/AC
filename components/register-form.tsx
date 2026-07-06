@@ -4,11 +4,11 @@ import { useState } from "react";
 
 export default function RegisterForm({
   sessionId,
-  children,
+  students,
 }: {
   sessionId: string;
 
-  children: {
+  students: {
     id: string;
 
     studentUser: {
@@ -80,7 +80,7 @@ export default function RegisterForm({
           Select Child
         </option>
 
-        {children.map((child) => (
+        {students.map((child) => (
           <option
             key={child.id}
             value={child.id}

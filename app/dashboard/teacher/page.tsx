@@ -2,9 +2,25 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
-import LogoutButton from "@/components/logout-button";
+
 import NotificationBell from "@/components/notification-bell";
+import LogoutButton from "@/components/logout-button";
+
+import PageContainer from "@/components/ui/PageContainer";
+import DashboardHero from "@/components/ui/DashboardHero";
+import DashboardSection from "@/components/ui/DashboardSection";
+import QuickActionCard from "@/components/ui/QuickActionCard";
+
+import { roleTheme } from "@/lib/theme";
+
+import {
+  CalendarDays,
+  ClipboardCheck,
+  MessageCircle,
+  Users,
+} from "lucide-react";
+
+import Link from "next/link";
 
 export default async function TeacherDashboard() {
   const session =
@@ -25,109 +41,175 @@ export default async function TeacherDashboard() {
       },
 
       include: {
-        teachingCourses: {
+        teachingSessions: {
+          orderBy: {
+            startTime: "asc",
+          },
           include: {
-            course: {
-              include: {
-                sessions: {
-                  orderBy: {
-                    startTime: "asc",
-                  },
-                },
-              },
-            },
+            course: true,
           },
         },
       },
     });
 
-  return (
-    <div className="p-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">
-            Teacher Dashboard
-          </h1>
+  const firstName =
+    teacher?.firstName ??
+    session.user.name ??
+    "Teacher";
 
-          <p className="mt-2 text-gray-600">
-            Welcome, {session.user.name}
-          </p>
+  const coursesWithSessions = Array.from(
+    (teacher?.teachingSessions ?? []).reduce(
+      (
+        courses,
+        teachingSession
+      ) => {
+        const existing = courses.get(
+          teachingSession.courseId
+        );
+
+        if (existing) {
+          existing.sessions.push(teachingSession);
+        } else {
+          courses.set(teachingSession.courseId, {
+            id: teachingSession.courseId,
+            title: teachingSession.course.title,
+            sessions: [teachingSession],
+          });
+        }
+
+        return courses;
+      },
+      new Map<
+        string,
+        {
+          id: string;
+          title: string;
+          sessions: NonNullable<
+            typeof teacher
+          >["teachingSessions"];
+        }
+      >()
+    ).values()
+  );
+
+  return (
+    <PageContainer>
+
+      <DashboardHero
+        title={`Welcome back, ${firstName}`}
+        subtitle="Manage today's classes and student attendance."
+        accent={roleTheme.teacher}
+      >
+        <div className="flex items-center gap-4">
+          <NotificationBell />
+          <LogoutButton />
+        </div>
+      </DashboardHero>
+
+      <DashboardSection title="Teaching Tools">
+
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+          <QuickActionCard
+            href="/calendar"
+            icon={CalendarDays}
+            title="Schedule"
+            description="View today's teaching schedule"
+          />
+
+          <QuickActionCard
+            href="/messages"
+            icon={MessageCircle}
+            title="Messages"
+            description="Communicate with parents"
+          />
+
+          <QuickActionCard
+            href="/students"
+            icon={Users}
+            title="Students"
+            description="View student profiles"
+          />
+
+          <QuickActionCard
+            href="/attendance"
+            icon={ClipboardCheck}
+            title="Attendance"
+            description="Review attendance records"
+          />
+
         </div>
 
-        <NotificationBell />
-        <LogoutButton />
+      </DashboardSection>
 
-      </div>
-      
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <Link
-          href="/messages"
-          className="rounded-xl border p-4 hover:bg-gray-50 transition"
-        >
-          <h2 className="font-semibold">
-            Messages
-          </h2>
+      <DashboardSection title="My Courses">
 
-          <p className="text-gray-500">
-            View your inbox
-          </p>
-        </Link>
-      </div>
-      <div className="mt-6 space-y-6">
-        {teacher?.teachingCourses.map(
-          (tc) => (
-            <div
-              key={tc.id}
-              className="rounded border p-4"
-            >
-              <h2 className="text-xl font-semibold">
-                {tc.course.title}
-              </h2>
+        <div className="space-y-6">
 
-              <p className="text-gray-500">
-                {
-                  tc.course.sessions
-                    .length
-                }{" "}
-                sessions
-              </p>
+          {coursesWithSessions.map(
+            (course) => (
+              <div
+                key={course.id}
+                className="rounded-2xl border bg-white p-6 shadow-sm"
+              >
+                <div className="flex items-center justify-between">
 
-              <div className="mt-4 space-y-2">
-                {tc.course.sessions.map(
-                  (s) => (
-                    <div
-                      key={s.id}
-                      className="flex items-center justify-between rounded border p-2"
-                    >
-                      <div>
-                        <p>
-                          {s.startTime.toLocaleString()}
-                        </p>
+                  <div>
+                    <h2 className="text-2xl font-semibold">
+                      {course.title}
+                    </h2>
 
-                        <p className="text-sm text-gray-500">
-                          Room:{" "}
-                          {s.room ??
-                            "N/A"}
-                        </p>
+                    <p className="mt-1 text-gray-500">
+                      {course.sessions.length} Sessions
+                    </p>
+                  </div>
+
+                </div>
+
+                <div className="mt-6 space-y-3">
+
+                  {course.sessions.map(
+                    (session) => (
+
+                      <div
+                        key={session.id}
+                        className="flex items-center justify-between rounded-xl border p-4"
+                      >
+
+                        <div>
+
+                          <p className="font-medium">
+                            {session.startTime.toLocaleString()}
+                          </p>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Room: {session.room ?? "N/A"}
+                          </p>
+
+                        </div>
+
+                        <Link
+                          href={`/admin/sessions/${session.id}`}
+                          className="rounded-xl bg-[#FAD78A] px-5 py-2 font-medium text-gray-800 transition hover:opacity-90"
+                        >
+                          Take Attendance
+                        </Link>
+
                       </div>
 
-                      <Link
-                        href={`/admin/sessions/${s.id}`}
-                        className="rounded bg-blue-600 px-3 py-1 text-white"
-                      >
-                        Take Attendance
-                      </Link>
-                    </div>
-                  )
-                )}
+                    )
+                  )}
+
+                </div>
+
               </div>
-            </div>
-          )
-        )}
-        
-      </div>
-    </div>
-    
+            )
+          )}
+
+        </div>
+
+      </DashboardSection>
+
+    </PageContainer>
   );
-  
 }

@@ -32,6 +32,7 @@ export default async function ParentCalendar() {
               session: {
                 include: {
                   course: true,
+                  teacher: true,
                 },
               },
             },
@@ -48,7 +49,10 @@ export default async function ParentCalendar() {
           (r) => ({
             title:
               `${child.studentUser.firstName}: ` +
-              r.session.course.title,
+              r.session.course.title +
+              (r.session.teacher
+                ? ` — ${r.session.teacher.firstName} ${r.session.teacher.lastName}`
+                : ""),
 
             start:
               r.session.startTime,

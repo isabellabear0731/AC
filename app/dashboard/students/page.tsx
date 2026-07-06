@@ -1,12 +1,29 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/logout-button";
 import { prisma } from "@/lib/prisma";
+
 import NotificationBell from "@/components/notification-bell";
+import LogoutButton from "@/components/logout-button";
+
+import PageContainer from "@/components/ui/PageContainer";
+import DashboardHero from "@/components/ui/DashboardHero";
+import DashboardSection from "@/components/ui/DashboardSection";
+import QuickActionCard from "@/components/ui/QuickActionCard";
+
+import { roleTheme } from "@/lib/theme";
+
+import {
+  CalendarDays,
+  ClipboardCheck,
+  FileText,
+  MessageCircle,
+  BarChart3,
+} from "lucide-react";
 
 export default async function StudentDashboard() {
-  const session = await getServerSession(authOptions);
+  const session =
+    await getServerSession(authOptions);
 
   if (!session) {
     redirect("/login");
@@ -16,61 +33,119 @@ export default async function StudentDashboard() {
     redirect("/dashboard");
   }
 
-  const student = await prisma.studentProfile.findUnique({
-    where: {
-      studentUserId: session.user.id,
-    },
-    include: {
-      parent: true,
-    },
-  });
+  const student =
+    await prisma.studentProfile.findUnique({
+      where: {
+        studentUserId: session.user.id,
+      },
+
+      include: {
+        parent: true,
+      },
+    });
+
+  const firstName =
+    session.user.name ??
+    "Student";
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">
-          Student Dashboard
-        </h1>
-      </div>
-
-      <div className="rounded-lg border p-4">
-        <p>
-          Welcome, {session.user.email}
-        </p>
-        
+    <PageContainer>
+      <DashboardHero
+        title={`Welcome, ${firstName}!`}
+        subtitle="Ready for another great day of learning?"
+        accent={roleTheme.student}
+      >
         <div className="flex items-center gap-4">
-        <NotificationBell />
-        <LogoutButton />
-
-      </div>
-
-        <p>
-          Parent: {student?.parent.firstName}{" "}
-          {student?.parent.lastName}
-        </p>
-
-        <p>
-          Account Status: Active
-        </p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded border p-4">
-          My Schedule
+          <NotificationBell />
+          <LogoutButton />
         </div>
+      </DashboardHero>
 
-        <div className="rounded border p-4">
-          Attendance
-        </div>
+      <DashboardSection title="My Learning">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <QuickActionCard
+            href="/calendar"
+            icon={CalendarDays}
+            title="My Schedule"
+            description="View upcoming classes and activities"
+          />
 
-        <div className="rounded border p-4">
-          Teacher Comments
-        </div>
+          <QuickActionCard
+            href="/attendance"
+            icon={ClipboardCheck}
+            title="Attendance"
+            description="Review your attendance history"
+          />
 
-        <div className="rounded border p-4">
-          Evaluations
+          <QuickActionCard
+            href="/evaluations"
+            icon={FileText}
+            title="Evaluations"
+            description="View teacher reports and evaluations"
+          />
+
+          <QuickActionCard
+            href="/messages"
+            icon={MessageCircle}
+            title="Messages"
+            description="Read teacher feedback and messages"
+          />
+
+          <QuickActionCard
+            href="/profile"
+            icon={BarChart3}
+            title="My Progress"
+            description="View your learning progress"
+          />
         </div>
-      </div>
-    </div>
+      </DashboardSection>
+
+      <DashboardSection title="My Information">
+        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800">
+            Student Information
+          </h3>
+
+          <div className="mt-4 space-y-2 text-gray-600">
+            <p>
+              <span className="font-medium">
+                Parent:
+              </span>{" "}
+              {student?.parent.firstName}{" "}
+              {student?.parent.lastName}
+            </p>
+
+            <p>
+              <span className="font-medium">
+                Account Status:
+              </span>{" "}
+              Active
+            </p>
+          </div>
+        </div>
+      </DashboardSection>
+
+      <DashboardSection title="Center Reminder">
+        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800">
+            Reminder
+          </h3>
+
+          <div className="mt-4 space-y-2 text-gray-600">
+            <p>
+              • Be respectful to classmates and teachers.
+            </p>
+
+            <p>
+              • Bring everything you need for class.
+            </p>
+
+            <p>
+              • Have fun learning!
+            </p>
+          </div>
+        </div>
+      </DashboardSection>
+    </PageContainer>
   );
 }

@@ -8,7 +8,12 @@ export default function AttendanceButtons({
   sessionId: string;
 }) {
   async function markAttendance(
-    status: string
+    status:
+      | "PENDING"
+      | "PRESENT"
+      | "LATE"
+      | "EXCUSED_ABSENT"
+      | "UNEXCUSED_ABSENT"
   ) {
     const res = await fetch(
       "/api/attendance",
@@ -62,7 +67,7 @@ export default function AttendanceButtons({
   }
 
   return (
-    <div className="mt-3 flex gap-2">
+    <div className="mt-3 flex flex-wrap gap-2">
       <button
         onClick={() =>
           markAttendance("PRESENT")
@@ -74,11 +79,20 @@ export default function AttendanceButtons({
 
       <button
         onClick={() =>
-          markAttendance("ABSENT")
+          markAttendance("EXCUSED_ABSENT")
         }
         className="rounded bg-red-600 px-3 py-1 text-white"
       >
-        Absent
+        Excused Absent
+      </button>
+
+      <button
+        onClick={() =>
+          markAttendance("UNEXCUSED_ABSENT")
+        }
+        className="rounded bg-red-700 px-3 py-1 text-white"
+      >
+        Unexcused Absent
       </button>
 
       <button
@@ -88,6 +102,15 @@ export default function AttendanceButtons({
         className="rounded bg-yellow-600 px-3 py-1 text-white"
       >
         Late
+      </button>
+
+      <button
+        onClick={() =>
+          markAttendance("PENDING")
+        }
+        className="rounded bg-gray-600 px-3 py-1 text-white"
+      >
+        Pending
       </button>
 
       <button

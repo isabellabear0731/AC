@@ -30,11 +30,8 @@ if (
     where: { id },
 
     include: {
-      course: {
-        include: {
-          teachers: true,
-        },
-      },
+      course: true,
+      teacher: true,
 
       registrations: {
         include: {
@@ -55,14 +52,7 @@ if (
     notFound();
   }
   if (authSession.user.role === "TEACHER") {
-    const assigned =
-      session.course.teachers.some(
-        (t) =>
-          t.teacherId ===
-          authSession.user.id
-      );
-  
-    if (!assigned) {
+    if (session.teacherId !== authSession.user.id) {
       redirect("/dashboard/teacher");
     }
   }
@@ -82,6 +72,13 @@ if (
 
       <p className="mt-2">
         {session.startTime.toLocaleString()}
+      </p>
+
+      <p>
+        Teacher:{" "}
+        {session.teacher
+          ? `${session.teacher.firstName} ${session.teacher.lastName}`
+          : "Unassigned"}
       </p>
 
       <div className="mt-6 space-y-4">

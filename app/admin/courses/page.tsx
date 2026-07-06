@@ -18,7 +18,7 @@ export default async function AdminCoursesPage() {
 
   const courses = await prisma.course.findMany({
     include: {
-      teachers: true,
+      category: true,
       sessions: true,
     },
     orderBy: {
@@ -56,7 +56,9 @@ export default async function AdminCoursesPage() {
                 {course.title}
               </h2>
 
-              <p>Category: {course.category}</p>
+              <p>
+                Category: {course.category?.name ?? "Uncategorized"}
+              </p>
 
               <p>Price: ${course.price}</p>
 
@@ -65,7 +67,14 @@ export default async function AdminCoursesPage() {
               </p>
 
               <p>
-                Teachers: {course.teachers.length}
+                Teachers:{" "}
+                {
+                  new Set(
+                    course.sessions
+                      .map((session) => session.teacherId)
+                      .filter(Boolean)
+                  ).size
+                }
               </p>
               <Link
                 href={`/admin/courses/${course.id}`}

@@ -7,26 +7,26 @@ datasource db {
 }
 
 model User {
-  id                String           @id @default(cuid())
-  email             String           @unique
+  id                String             @id @default(cuid())
+  email             String             @unique
   passwordHash      String
   firstName         String
   lastName          String
   phone             String?
   role              Role
-  isActive          Boolean          @default(true)
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  emailVerified     Boolean          @default(false)
-  editedAttendances Attendance[]     @relation("AttendanceEditor")
-  teachingCourses   CourseTeacher[]
-  uploadedFiles     EvaluationFile[]
-  receivedMessages  Message[]        @relation("MessageReceiver")
-  sentMessages      Message[]        @relation("MessageSender")
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  emailVerified     Boolean            @default(false)
+  editedAttendances Attendance[]       @relation("AttendanceEditor")
+  teachingSessions  CourseSession[]    @relation("TeacherSessions")
+  uploadedResources TeachingResource[] @relation("UploadedResources")
+  receivedMessages  Message[]          @relation("MessageReceiver")
+  sentMessages      Message[]          @relation("MessageSender")
   notifications     Notification[]
-  children          StudentProfile[] @relation("ParentStudents")
+  children          StudentProfile[]   @relation("ParentStudents")
   studentProfile    StudentProfile?
-  teacherComments   TeacherComment[] @relation("TeacherComments")
+  teacherComments   TeacherComment[]   @relation("TeacherComments")
 }
 
 model StudentProfile {
@@ -41,7 +41,6 @@ model StudentProfile {
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   attendance    Attendance[]
-  files         EvaluationFile[]
   registrations Registration[]
   parent        User             @relation("ParentStudents", fields: [parentId], references: [id])
   studentUser   User             @relation(fields: [studentUserId], references: [id])
@@ -49,46 +48,57 @@ model StudentProfile {
 }
 
 model Course {
-  id          String @id @default(cuid())
+  id String @id @default(cuid())
 
   title       String
   description String?
-  category    String
+  categoryId  String?
+  category    CourseCategory? @relation(fields: [categoryId], references: [id])
   price       Float
 
-  location    String?
-  isActive    Boolean @default(true)
+  location String?
+  isActive Boolean @default(true)
 
-  capacity    Int?
+  capacity Int?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  sessions    CourseSession[]
-  teachers    CourseTeacher[]
+  sessions CourseSession[]
 }
 
-model CourseTeacher {
-  id        String @id @default(cuid())
-  courseId  String
-  teacherId String
-  course    Course @relation(fields: [courseId], references: [id])
-  teacher   User   @relation(fields: [teacherId], references: [id])
+model CourseCategory {
+  id        String  @id @default(cuid())
+  name      String  @unique
+  color     String?
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
 
-  @@unique([courseId, teacherId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses Course[]
 }
 
 model CourseSession {
-  id            String         @id @default(cuid())
-  courseId      String
-  startTime     DateTime
-  endTime       DateTime
-  notes         String?
-  room          String?
-  createdAt     DateTime       @default(now())
-  attendance    Attendance[]
-  course        Course         @relation(fields: [courseId], references: [id])
-  registrations Registration[]
+  id                String             @id @default(cuid())
+  courseId          String
+  title             String?
+  startTime         DateTime
+  endTime           DateTime
+  teacherId         String?
+  weekday           Weekday?
+  displayOrder      Int                @default(0)
+  capacityOverride  Int?
+  isCancelled       Boolean            @default(false)
+  teacher           User?              @relation("TeacherSessions", fields: [teacherId], references: [id])
+  notes             String?
+  room              String?
+  createdAt         DateTime           @default(now())
+  attendance        Attendance[]
+  course            Course             @relation(fields: [courseId], references: [id])
+  registrations     Registration[]
+  teachingResources TeachingResource[]
 }
 
 model Registration {
@@ -97,6 +107,7 @@ model Registration {
   sessionId    String
   status       RegistrationStatus @default(PENDING)
   cancelReason String?
+  approvedAt   DateTime?
   createdAt    DateTime           @default(now())
   payment      Payment?
   session      CourseSession      @relation(fields: [sessionId], references: [id])
@@ -109,12 +120,13 @@ model Attendance {
   id        String           @id @default(cuid())
   studentId String
   sessionId String
-  status    AttendanceStatus @default(ABSENT)
+  status    AttendanceStatus @default(PENDING)
 
   checkInTime   DateTime?
   checkOutTime  DateTime?
   arrivalNote   String?
   departureNote String?
+  reason        String?
 
   editedById String?
   createdAt  DateTime       @default(now())
@@ -135,16 +147,20 @@ model TeacherComment {
   teacher   User           @relation("TeacherComments", fields: [teacherId], references: [id])
 }
 
-model EvaluationFile {
-  id           String         @id @default(cuid())
-  studentId    String
-  uploadedById String
-  fileName     String
-  fileUrl      String
-  fileType     String
-  createdAt    DateTime       @default(now())
-  student      StudentProfile @relation(fields: [studentId], references: [id])
-  uploadedBy   User           @relation(fields: [uploadedById], references: [id])
+model TeachingResource {
+  id               String         @id @default(cuid())
+  sessionId        String?
+  uploadedById     String
+  title            String
+  description      String?
+  fileUrl          String
+  mimeType         String
+  resourceType     ResourceType
+  visibleToStudent Boolean        @default(true)
+  visibleToParent  Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  session          CourseSession? @relation(fields: [sessionId], references: [id])
+  uploadedBy       User           @relation("UploadedResources", fields: [uploadedById], references: [id])
 }
 
 model Message {
@@ -209,6 +225,24 @@ enum NotificationType {
 
 enum AttendanceStatus {
   PRESENT
-  ABSENT
   LATE
+  EXCUSED_ABSENT
+  UNEXCUSED_ABSENT
+  PENDING
+}
+
+enum ResourceType {
+  MATERIAL
+  PHOTO
+  EVALUATION
+}
+
+enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }

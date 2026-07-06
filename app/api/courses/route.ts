@@ -6,8 +6,12 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   const courses = await prisma.course.findMany({
     include: {
-      teachers: true,
-      sessions: true,
+      category: true,
+      sessions: {
+        include: {
+          teacher: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -29,11 +33,33 @@ export async function POST(req: Request) {
 
   const body = await req.json();
 
+  const categoryId =
+    typeof body.categoryId === "string"
+      ? body.categoryId
+      : "";
+
+  const category = await prisma.courseCategory.findFirst({
+    where: {
+      id: categoryId,
+      isActive: true,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!category) {
+    return NextResponse.json(
+      { error: "A valid category is required" },
+      { status: 400 }
+    );
+  }
+
   const course = await prisma.course.create({
     data: {
       title: body.title,
       description: body.description,
-      category: body.category,
+      categoryId: category.id,
       price: Number(body.price),
       location: body.location,
   

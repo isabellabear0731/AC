@@ -30,6 +30,7 @@ export default async function RegisterPage({
 
       include: {
         course: true,
+        teacher: true,
       },
     });
 
@@ -71,12 +72,19 @@ export default async function RegisterPage({
           Room:{" "}
           {courseSession.room ?? "TBD"}
         </p>
+
+        <p>
+          Teacher:{" "}
+          {courseSession.teacher
+            ? `${courseSession.teacher.firstName} ${courseSession.teacher.lastName}`
+            : "TBD"}
+        </p>
       </div>
 
       <div className="mt-6">
         <RegisterForm
           sessionId={courseSession.id}
-          children={
+          students={
             parent?.children ?? []
           }
         />

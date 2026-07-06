@@ -24,6 +24,7 @@ export default async function ChildPage({
           session: {
             include: {
               course: true,
+              teacher: true,
             },
           },
         },
@@ -108,6 +109,13 @@ if (
                     Room:{" "}
                     {r.session.room ??
                         "TBD"}
+                    </p>
+
+                    <p>
+                    Teacher:{" "}
+                    {r.session.teacher
+                      ? `${r.session.teacher.firstName} ${r.session.teacher.lastName}`
+                      : "TBD"}
                     </p>
                 </li>
                 ))}
