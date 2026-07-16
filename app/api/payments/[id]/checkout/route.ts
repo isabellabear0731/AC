@@ -2,8 +2,17 @@ import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+const stripeSecretKey =
+  process.env.STRIPE_SECRET_KEY;
+
+if (!stripeSecretKey) {
+  throw new Error(
+    "STRIPE_SECRET_KEY is required."
+  );
+}
+
 const stripe = new Stripe(
-  process.env.STRIPE_SECRET_KEY!
+  stripeSecretKey
 );
 
 export async function POST(
@@ -49,6 +58,21 @@ export async function POST(
     );
   }
 
+  const appUrl =
+    process.env.NEXTAUTH_URL;
+
+  if (!appUrl) {
+    return NextResponse.json(
+      {
+        error:
+          "Payment checkout is not configured.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+
   const checkout =
     await stripe.checkout.sessions.create({
       mode: "payment",
@@ -81,13 +105,25 @@ export async function POST(
       },
 
       success_url:
-        `${process.env.NEXTAUTH_URL}/parent/payments?success=1`,
+        `${appUrl}/parent/payments?success=1`,
 
       cancel_url:
-        `${process.env.NEXTAUTH_URL}/parent/payments?cancel=1`,
+        `${appUrl}/parent/payments?cancel=1`,
     });
 
-    return NextResponse.redirect(
-        checkout.url!
-      );
+  if (!checkout.url) {
+    return NextResponse.json(
+      {
+        error:
+          "Stripe did not return a checkout URL.",
+      },
+      {
+        status: 502,
+      }
+    );
+  }
+
+  return NextResponse.redirect(
+    checkout.url
+  );
 }

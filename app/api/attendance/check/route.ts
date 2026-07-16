@@ -75,24 +75,75 @@ export async function POST(req: Request) {
 
   const now = new Date();
 
-  const updated =
-    await prisma.attendance.update({
-      where: {
-        id: attendance.id,
+if (
+  type === "checkin" &&
+  attendance.checkInTime
+) {
+  return NextResponse.json(
+    {
+      error: "Student has already checked in.",
+    },
+    {
+      status: 400,
+    }
+  );
+}
+
+if (
+  type === "checkout"
+) {
+
+  if (!attendance.checkInTime) {
+
+    return NextResponse.json(
+      {
+        error: "Student must check in first.",
       },
+      {
+        status: 400,
+      }
+    );
 
-      data: {
-        ...(type === "checkin" && {
-          checkInTime: now,
-        }),
+  }
 
-        ...(type === "checkout" && {
-          checkOutTime: now,
-        }),
+  if (attendance.checkOutTime) {
 
-        editedById: session.user.id,
+    return NextResponse.json(
+      {
+        error: "Student has already checked out.",
       },
-    });
+      {
+        status: 400,
+      }
+    );
 
-  return NextResponse.json(updated);
+  }
+
+}
+
+const updated =
+  await prisma.attendance.update({
+
+    where: {
+      id: attendance.id,
+    },
+
+    data: {
+
+      ...(type === "checkin"
+        ? {
+            checkInTime: now,
+          }
+        : {
+            checkOutTime: now,
+          }),
+
+      editedById:
+        session.user.id,
+
+    },
+
+  });
+
+return NextResponse.json(updated);
 }

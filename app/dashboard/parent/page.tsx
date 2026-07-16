@@ -66,37 +66,86 @@ export default async function ParentDashboard() {
       </DashboardHero>
 
       <DashboardSection title="My Children">
-        <div className="grid gap-6 md:grid-cols-2">
-          {parent?.children.map((child) => (
-            <QuickActionCard
-              key={child.id}
-              href={`/parent/children/${child.id}`}
-              icon={User}
-              title={`${child.studentUser.firstName} ${child.studentUser.lastName}`}
-              description="View schedule, attendance and progress"
-            />
-          ))}
+        <div className="mb-6 flex items-center justify-between">
+          <p className="text-gray-500">
+            Manage your children's profiles.
+          </p>
+
+          <a
+            href="/parent/children/new"
+            className="rounded-xl bg-[#7AAACD] px-4 py-2 text-white hover:opacity-90"
+          >
+            + Add Child
+          </a>
         </div>
+
+        {!parent || parent.children.length === 0 ? (
+          <div className="rounded-2xl border border-dashed bg-white p-10 text-center">
+            <div className="mx-auto max-w-md">
+              <h3 className="text-2xl font-semibold">
+                No Children Yet
+              </h3>
+
+              <p className="mt-3 text-gray-500">
+                Before registering for courses, add your first child to your
+                account.
+              </p>
+
+              <a
+                href="/parent/children/new"
+                className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90"
+              >
+                Add Your First Child
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2">
+            {parent.children.map((child) => (
+              <QuickActionCard
+                key={child.id}
+                href={`/parent/children/${child.id}`}
+                icon={User}
+                title={`${child.studentUser.firstName} ${child.studentUser.lastName}`}
+                description="View schedule, attendance and progress"
+              />
+            ))}
+          </div>
+        )}
       </DashboardSection>
 
       <DashboardSection title="Family Services">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <QuickActionCard
-            href="/parent/calendar"
+            href="/portal/schedule"
             icon={Calendar}
             title="Family Calendar"
             description="View upcoming classes and events"
           />
 
           <QuickActionCard
-            href="/parent/courses"
+            href="/portal/courses"
             icon={BookOpen}
             title="Browse Courses"
             description="Register for available courses"
           />
 
           <QuickActionCard
-            href="/parent/payments"
+            href="/portal/attendance"
+            icon={Calendar}
+            title="Attendance"
+            description="View attendance records for all children"
+          />
+
+          <QuickActionCard
+            href="/portal/materials"
+            icon={MessageCircle}
+            title="Learning Resources"
+            description="View learning materials, class photos and evaluations"
+          />
+
+          <QuickActionCard
+            href="/portal/payments"
             icon={CreditCard}
             title="Payments"
             description="View invoices and payment status"
@@ -108,7 +157,10 @@ export default async function ParentDashboard() {
             title="Messages"
             description="Communicate with teachers and staff"
           />
+
+
         </div>
+        
       </DashboardSection>
 
       <DashboardSection title="Center Services">
@@ -119,7 +171,7 @@ export default async function ParentDashboard() {
 
           <div className="mt-4 space-y-3 text-gray-600">
             <p>
-              • Welcome to the Autism Center Parent Portal.
+              • Welcome to the Gifted People Service Parent Portal.
             </p>
 
             <p>

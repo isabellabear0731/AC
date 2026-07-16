@@ -16,6 +16,21 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Email configuration
+
+Password reset and email verification messages are delivered through the
+[Resend Email API](https://resend.com/docs/api-reference/emails/send-email).
+Copy `.env.example` to `.env` and configure `RESEND_API_KEY`, `EMAIL_FROM`,
+and the public `NEXTAUTH_URL` before using these flows.
+
+After pulling schema changes, apply the token-table migration and regenerate
+the Prisma client:
+
+```bash
+npx prisma migrate deploy
+npx prisma generate
+```
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import { NextAuthOptions } from "next-auth";
+import { normalizeEmail } from "@/lib/auth-tokens";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -24,7 +25,7 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials.email,
+            email: normalizeEmail(credentials.email),
           },
         });
 
@@ -43,6 +44,10 @@ export const authOptions: NextAuthOptions = {
 
         if (!validPassword) {
           return null;
+        }
+
+        if (!user.emailVerified) {
+          throw new Error("EMAIL_NOT_VERIFIED");
         }
 
         return {

@@ -5,8 +5,17 @@ import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+const stripeSecretKey =
+  process.env.STRIPE_SECRET_KEY;
+
+if (!stripeSecretKey) {
+  throw new Error(
+    "STRIPE_SECRET_KEY is required."
+  );
+}
+
 const stripe = new Stripe(
-  process.env.STRIPE_SECRET_KEY!
+  stripeSecretKey
 );
 
 export async function POST(req: Request) {
@@ -27,12 +36,21 @@ export async function POST(req: Request) {
   let event: Stripe.Event;
 
   try {
+    const webhookSecret =
+      process.env.STRIPE_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
+      return new NextResponse(
+        "Missing webhook secret",
+        { status: 500 }
+      );
+    }
+
     event =
       stripe.webhooks.constructEvent(
         body,
         signature,
-        process.env
-          .STRIPE_WEBHOOK_SECRET!
+        webhookSecret
       );
   } catch (err) {
     return new NextResponse(
@@ -76,7 +94,9 @@ export async function POST(req: Request) {
         data: {
           userId:
             payment.registration.student
-              .parentId,
+              .parentId ??
+            payment.registration.student
+              .studentUserId,
 
           type: "PAYMENT",
 

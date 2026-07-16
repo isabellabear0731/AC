@@ -31,22 +31,22 @@ export async function POST(
       },
     });
 
-  if (payment.registration.student.parentId) {
-    await prisma.notification.create({
-      data: {
-        userId:
-          payment.registration.student
-            .parentId,
+  await prisma.notification.create({
+    data: {
+      userId:
+        payment.registration.student
+          .parentId ??
+        payment.registration.student
+          .studentUserId,
 
-        type: "PAYMENT",
+      type: "PAYMENT",
 
-        title: "Payment Received",
+      title: "Payment Received",
 
-        message:
-          "Your payment has been recorded.",
-      },
-    });
-  }
+      message:
+        "Your payment has been recorded.",
+    },
+  });
 
   return NextResponse.redirect(
     new URL(

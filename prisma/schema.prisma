@@ -3,36 +3,63 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
 
 model User {
-  id                String             @id @default(cuid())
-  email             String             @unique
-  passwordHash      String
-  firstName         String
-  lastName          String
-  phone             String?
-  role              Role
-  isActive          Boolean            @default(true)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  emailVerified     Boolean            @default(false)
-  editedAttendances Attendance[]       @relation("AttendanceEditor")
-  teachingSessions  CourseSession[]    @relation("TeacherSessions")
-  uploadedResources TeachingResource[] @relation("UploadedResources")
-  receivedMessages  Message[]          @relation("MessageReceiver")
-  sentMessages      Message[]          @relation("MessageSender")
-  notifications     Notification[]
-  children          StudentProfile[]   @relation("ParentStudents")
-  studentProfile    StudentProfile?
-  teacherComments   TeacherComment[]   @relation("TeacherComments")
+  id                      String                   @id @default(cuid())
+  email                   String                   @unique
+  passwordHash            String
+  firstName               String
+  lastName                String
+  phone                   String?
+  role                    Role
+  isActive                Boolean                  @default(true)
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  emailVerified           Boolean                  @default(false)
+  editedAttendances       Attendance[]             @relation("AttendanceEditor")
+  teachingSessions        CourseSession[]          @relation("TeacherSessions")
+  uploadedResources       TeachingResource[]       @relation("UploadedResources")
+  receivedMessages        Message[]                @relation("MessageReceiver")
+  sentMessages            Message[]                @relation("MessageSender")
+  notifications           Notification[]
+  children                StudentProfile[]         @relation("ParentStudents")
+  studentProfile          StudentProfile?
+  teacherComments         TeacherComment[]         @relation("TeacherComments")
+  passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  auditLogs               AuditLog[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model StudentProfile {
   id               String    @id @default(cuid())
   studentUserId    String    @unique
-  parentId         String
+  parentId         String?
   dateOfBirth      DateTime?
   notes            String?
   emergencyContact String?
@@ -42,7 +69,7 @@ model StudentProfile {
   updatedAt     DateTime         @updatedAt
   attendance    Attendance[]
   registrations Registration[]
-  parent        User             @relation("ParentStudents", fields: [parentId], references: [id])
+  parent        User?            @relation("ParentStudents", fields: [parentId], references: [id])
   studentUser   User             @relation(fields: [studentUserId], references: [id])
   comments      TeacherComment[]
 }
@@ -195,9 +222,37 @@ model Payment {
   registration   Registration  @relation(fields: [registrationId], references: [id])
 }
 
+model AuditLog {
+  id String @id @default(cuid())
+
+  actorId String?
+  actor   User?   @relation(fields: [actorId], references: [id])
+
+  action String
+
+  entityType String
+  entityId   String
+
+  description String?
+
+  before Json?
+  after  Json?
+
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([createdAt])
+}
+
 enum Role {
   PARENT
   STUDENT
+  ADULT
   TEACHER
   ADMIN
 }

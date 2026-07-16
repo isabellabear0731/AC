@@ -48,6 +48,13 @@ export default async function StudentDashboard() {
     session.user.name ??
     "Student";
 
+  const parent = student?.parent;
+
+  const guardianName =
+    parent
+      ? `${parent.firstName} ${parent.lastName}`
+      : "Adult Student";
+
   return (
     <PageContainer>
       <DashboardHero
@@ -64,28 +71,28 @@ export default async function StudentDashboard() {
       <DashboardSection title="My Learning">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <QuickActionCard
-            href="/calendar"
+            href="/portal/schedule"
             icon={CalendarDays}
             title="My Schedule"
             description="View upcoming classes and activities"
           />
 
           <QuickActionCard
-            href="/attendance"
+            href="/portal/attendance"
             icon={ClipboardCheck}
             title="Attendance"
             description="Review your attendance history"
           />
 
           <QuickActionCard
-            href="/evaluations"
+            href="/portal/materials"
             icon={FileText}
-            title="Evaluations"
-            description="View teacher reports and evaluations"
+            title="Learning Materials"
+            description="View learning materials uploaded by your teachers."
           />
 
           <QuickActionCard
-            href="/messages"
+            href="/portal/messages"
             icon={MessageCircle}
             title="Messages"
             description="Read teacher feedback and messages"
@@ -111,8 +118,7 @@ export default async function StudentDashboard() {
               <span className="font-medium">
                 Parent:
               </span>{" "}
-              {student?.parent.firstName}{" "}
-              {student?.parent.lastName}
+              {guardianName}
             </p>
 
             <p>

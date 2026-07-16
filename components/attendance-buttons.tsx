@@ -67,7 +67,10 @@ export default function AttendanceButtons({
   }
 
   return (
-    <div className="mt-3 flex flex-wrap gap-2">
+    <div className="mt-5 space-y-4">
+
+    <div className="flex flex-wrap gap-2">
+
       <button
         onClick={() =>
           markAttendance("PRESENT")
@@ -112,6 +115,9 @@ export default function AttendanceButtons({
       >
         Pending
       </button>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
 
       <button
         onClick={() =>
@@ -130,6 +136,7 @@ export default function AttendanceButtons({
       >
         Check Out
       </button>
+      </div>
     </div>
   );
 }

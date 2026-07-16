@@ -1,39 +1,58 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export default async function CourseCategoriesPage() {
   const categories =
-    await prisma.courseCategory.findMany({
-      orderBy: [
-        {
-          sortOrder: "asc",
+  await prisma.courseCategory.findMany({
+    include: {
+      _count: {
+        select: {
+          courses: true,
         },
-        {
-          name: "asc",
-        },
-      ],
-    });
+      },
+    },
+
+    orderBy: [
+      {
+        sortOrder: "asc",
+      },
+      {
+        name: "asc",
+      },
+    ],
+  });
 
   return (
-    <div className="p-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">
-            Course Categories
-          </h1>
+    <div className="mb-8 flex items-center justify-between">
 
-          <p className="mt-2 text-gray-500">
-            Manage available course
-            categories.
-          </p>
-        </div>
+      <div>
+        <h1 className="text-4xl font-bold">
+          Course Categories
+        </h1>
+
+        <p className="mt-2 text-gray-500">
+          Organize courses into reusable categories.
+        </p>
+      </div>
+
+      <div className="flex gap-3">
 
         <Link
           href="/admin/categories/new"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+          className="rounded-xl bg-[#7AAACD] px-5 py-2 text-white"
         >
-          Add Category
+          + New Category
         </Link>
+
+        <Link
+          href="/dashboard/admin"
+          className="rounded-xl border bg-white px-5 py-2"
+        >
+          ← Dashboard
+        </Link>
+
       </div>
 
       <div className="rounded-xl border bg-white">
@@ -52,6 +71,10 @@ export default async function CourseCategoriesPage() {
                 Status
               </th>
 
+              <th className="p-4 text-left">
+                  Courses
+              </th>
+
               <th className="p-4 text-right">
                 Actions
               </th>
@@ -67,6 +90,9 @@ export default async function CourseCategoriesPage() {
                 >
                   <td className="p-4">
                     {category.name}
+                  </td>
+                  <td className="p-4">
+                      {category._count.courses}
                   </td>
 
                   <td className="p-4">
