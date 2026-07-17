@@ -35,7 +35,16 @@ export default function UploadForm({
     e.preventDefault();
 
     if (!file) {
-      alert("Please choose a file.");
+      alert("Please select a file.");
+      return;
+    }
+    
+    const MAX_SIZE = 30 * 1024 * 1024; // 30 MB
+    
+    if (file.size > MAX_SIZE) {
+      alert(
+        "Files larger than 30 MB are not supported. Please compress the file or split it into multiple files before uploading."
+      );
       return;
     }
 
@@ -43,34 +52,32 @@ export default function UploadForm({
 
     try {
 
-      // Upload file to Supabase
+      // Upload file to Supabase through API
 
-      const uploadData = new FormData();
+        const uploadData = new FormData();
 
-      uploadData.append("file", file);
+        uploadData.append("file", file);
 
-      uploadData.append(
-        "resourceType",
-        resourceType
-      );
-
-      const uploadResponse =
-        await fetch(
-          "/api/resources/upload",
-          {
-            method: "POST",
-            body: uploadData,
-          }
+        uploadData.append(
+          "resourceType",
+          resourceType
         );
 
-      if (!uploadResponse.ok) {
-        throw new Error(
-          "Upload failed."
-        );
-      }
+        const uploadResponse =
+          await fetch(
+            "/api/resources/upload",
+            {
+              method: "POST",
+              body: uploadData,
+            }
+          );
 
-      const uploaded =
-        await uploadResponse.json();
+        if (!uploadResponse.ok) {
+          throw new Error("Upload failed.");
+        }
+
+        const uploaded =
+          await uploadResponse.json();
 
       // Save database record
 
@@ -90,9 +97,9 @@ export default function UploadForm({
               title,
               description,
               fileUrl:
-                uploaded.fileUrl,
-              mimeType:
-                uploaded.mimeType,
+              uploaded.fileUrl,
+            mimeType:
+              uploaded.mimeType,
               resourceType,
               visibleToStudent,
               visibleToParent,

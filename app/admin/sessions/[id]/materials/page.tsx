@@ -195,8 +195,7 @@ export default async function MaterialsPage({
                     </a>
 
                     <a
-                      href={resource.fileUrl}
-                      download
+                      href={`${resource.fileUrl}?download=${encodeURIComponent(resource.title)}`}
                       className="rounded-xl border px-4 py-2"
                     >
                       Download

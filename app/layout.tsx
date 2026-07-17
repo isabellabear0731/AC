@@ -3,8 +3,8 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
-  title: "Autism Center Register",
-  description: "Autism Center Registration System",
+  title: "Gifted People Services Register",
+  description: "Gifted People Services Registration System",
 };
 
 export default function RootLayout({

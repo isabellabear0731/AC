@@ -22,7 +22,7 @@ export default function AuthShell({
         <div className="mb-8 text-center">
           <Link
             href="/"
-            aria-label="The Gifted Center home"
+            aria-label="The Gifted People Services home"
             className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-bold text-white"
             style={{
               backgroundColor: "#7AAACD",
@@ -45,7 +45,7 @@ export default function AuthShell({
         {footer}
 
         <div className="mt-10 border-t pt-5 text-center text-xs text-gray-400">
-          © 2026 The Gifted Center
+          © 2026 The Gifted People Services
         </div>
       </div>
     </div>

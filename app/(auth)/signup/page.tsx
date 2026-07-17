@@ -64,7 +64,7 @@ export default function SignupPage() {
   return (
     <AuthShell
       title="Create Account"
-      subtitle="Join The Gifted Center family."
+      subtitle="Join The Gifted People Services family."
       footer={
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{" "}

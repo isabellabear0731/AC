@@ -7,15 +7,6 @@ import { supabase } from "@/lib/supabase";
 export async function POST(
   request: NextRequest
 ) {
-  console.log(
-    "SUPABASE URL:",
-    process.env.NEXT_PUBLIC_SUPABASE_URL
-  );
-  
-  console.log(
-    "SERVICE ROLE EXISTS:",
-    !!process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
   try {
   const session =
     await getServerSession(authOptions);
@@ -42,6 +33,18 @@ export async function POST(
 
   const file =
     form.get("file") as File;
+  
+  const MAX_SIZE = 30 * 1024 * 1024; // 30 MB
+    if (file && file.size > MAX_SIZE) {
+      return NextResponse.json(
+        {
+          error: "Maximum upload size is 30 MB.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
 
   const resourceType =
     form.get("resourceType") as string;

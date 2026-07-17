@@ -79,7 +79,7 @@ export async function sendVerificationEmail({
 
   await sendEmail({
     to: email,
-    subject: "Verify your Gifted Center email",
+    subject: "Verify your Gifted People Services email",
     idempotencyKey: `verify-${tokenHash}`,
     text:
       `Hi ${firstName},\n\nVerify your email by opening this link:\n` +
@@ -88,7 +88,7 @@ export async function sendVerificationEmail({
       <div style="font-family:Arial,sans-serif;color:#374151;line-height:1.6">
         <h1 style="color:#7AAACD">Verify your email</h1>
         <p>Hi ${safeName},</p>
-        <p>Welcome to The Gifted Center. Please verify your email address to activate sign-in.</p>
+        <p>Welcome to The Gifted People Services. Please verify your email address to activate sign-in.</p>
         <p>
           <a href="${safeUrl}" style="display:inline-block;border-radius:10px;background:#7AAACD;color:#fff;padding:12px 20px;text-decoration:none;font-weight:600">
             Verify Email
@@ -116,7 +116,7 @@ export async function sendPasswordResetEmail({
 
   await sendEmail({
     to: email,
-    subject: "Reset your Gifted Center password",
+    subject: "Reset your Gifted People Services password",
     idempotencyKey: `reset-${tokenHash}`,
     text:
       `Hi ${firstName},\n\nReset your password by opening this link:\n` +
@@ -125,7 +125,7 @@ export async function sendPasswordResetEmail({
       <div style="font-family:Arial,sans-serif;color:#374151;line-height:1.6">
         <h1 style="color:#7AAACD">Reset your password</h1>
         <p>Hi ${safeName},</p>
-        <p>We received a request to reset your Gifted Center password.</p>
+        <p>We received a request to reset your Gifted People Services password.</p>
         <p>
           <a href="${safeUrl}" style="display:inline-block;border-radius:10px;background:#7AAACD;color:#fff;padding:12px 20px;text-decoration:none;font-weight:600">
             Reset Password

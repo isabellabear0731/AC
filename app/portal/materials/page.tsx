@@ -281,18 +281,13 @@ export default async function PortalMaterialsPage() {
 
           </Link>
 
-          <Link
-            href={resource.fileUrl}
-            target="_blank"
-            download
+          <a
+            href={`${resource.fileUrl}?download=${encodeURIComponent(resource.title)}`}
             className="flex items-center gap-2 rounded-xl border px-4 py-2 transition hover:bg-gray-50"
           >
-
             <Download className="h-4 w-4" />
-
             Download
-
-          </Link>
+          </a>
 
         </div>
 
