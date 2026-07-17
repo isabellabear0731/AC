@@ -603,7 +603,7 @@ className="rounded-xl border bg-white px-5 py-3 hover:bg-gray-50"
 href="/dashboard/admin"
 className="rounded-xl bg-[#7AAACD] px-5 py-3 text-white transition hover:opacity-90"
 >
-Admin Dashboard
+Dashboard
 </Link>
 
 </div>

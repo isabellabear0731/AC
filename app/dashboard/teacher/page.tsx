@@ -192,7 +192,7 @@ export default async function TeacherDashboard() {
                           href={`/admin/sessions/${session.id}`}
                           className="rounded-xl bg-[#FAD78A] px-5 py-2 font-medium text-gray-800 transition hover:opacity-90"
                         >
-                          Take Attendance
+                          Take Attendance and Upload Materials
                         </Link>
 
                       </div>
