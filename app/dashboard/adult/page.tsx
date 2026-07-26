@@ -39,12 +39,53 @@ export default async function AdultDashboard() {
       where: {
         id: session.user.id,
       },
+
+      include: {
+        studentProfile: true,
+      },
     });
 
   const firstName =
     user?.firstName ??
     session.user.name ??
     "Student";
+
+  if (!user?.studentProfile) {
+    return (
+      <PageContainer>
+        <DashboardHero
+          title={`Welcome back, ${firstName} 👋`}
+          subtitle="Manage your classes, attendance and learning resources."
+          accent={roleTheme.student}
+        >
+          <div className="flex items-center gap-4">
+            <NotificationBell />
+            <LogoutButton />
+          </div>
+        </DashboardHero>
+
+        <DashboardSection title="Learner Profile">
+          <div className="rounded-2xl border bg-white p-10 text-center shadow-sm">
+            <h3 className="text-2xl font-semibold">
+              Your learner profile is not available.
+            </h3>
+
+            <p className="mx-auto mt-3 max-w-xl text-gray-500">
+              Please contact an administrator so we can finish setting up your
+              adult learner profile.
+            </p>
+
+            <a
+              href="/messages/new"
+              className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90"
+            >
+              Contact Administrator
+            </a>
+          </div>
+        </DashboardSection>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer>

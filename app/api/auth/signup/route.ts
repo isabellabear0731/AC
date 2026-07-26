@@ -175,33 +175,76 @@ export async function POST(req: Request) {
       );
 
     if (
-      process.env.NODE_ENV !==
+      process.env.NODE_ENV ===
       "development"
     ) {
-      try {
-        await issueEmailVerification({
+      return NextResponse.json(
+        {
+          message:
+            "Account created successfully.",
+          emailVerified: true,
+        },
+        {
+          status: 201,
+        }
+      );
+    }
+
+    const verificationDelivery =
+      await issueEmailVerification({
+        userId: user.id,
+        email: user.email,
+        firstName:
+          user.firstName,
+        appUrl:
+          getAppUrl(req),
+      });
+
+    if (!verificationDelivery.ok) {
+      const warning =
+        "Account created, but the verification email could not be delivered. Please request a new verification email from the login page later.";
+
+      console.error(
+        "Signup verification email was not delivered",
+        {
           userId: user.id,
           email: user.email,
-          firstName:
-            user.firstName,
+          skipped:
+            verificationDelivery.skipped,
+          reason:
+            verificationDelivery.reason,
+          status:
+            "status" in verificationDelivery
+              ? verificationDelivery.status
+              : undefined,
+          providerBody:
+            "providerBody" in verificationDelivery
+              ? verificationDelivery.providerBody
+              : undefined,
           appUrl:
             getAppUrl(req),
-        });
-      } catch (error) {
-        console.error(
-          "Verification email failed:",
-          error
-        );
-      }
+        }
+      );
+
+      return NextResponse.json(
+        {
+          message: warning,
+          warning,
+          emailVerified: false,
+          emailDelivered: false,
+        },
+        {
+          status: 201,
+        }
+      );
     }
 
     return NextResponse.json(
       {
         message:
-          process.env.NODE_ENV ===
-          "development"
-            ? "Account created successfully."
-            : "Account created. Please check your email to verify your account.",
+          "Account created. Please check your email to verify your account.",
+        emailVerified: false,
+        emailDelivered: true,
       },
       {
         status: 201,

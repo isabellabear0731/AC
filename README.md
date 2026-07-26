@@ -21,7 +21,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Password reset and email verification messages are delivered through the
 [Resend Email API](https://resend.com/docs/api-reference/emails/send-email).
 Copy `.env.example` to `.env` and configure `RESEND_API_KEY`, `EMAIL_FROM`,
-and the public `NEXTAUTH_URL` before using these flows.
+and the public `NEXTAUTH_URL` or `NEXT_PUBLIC_APP_URL` before using these
+flows. In Vercel production, set the URL to the canonical deployed app origin
+so verification links point to the live site.
 
 After pulling schema changes, apply the token-table migration and regenerate
 the Prisma client:

@@ -22,12 +22,17 @@ export default async function CalendarPage() {
   const isAdmin =
     authSession?.user.role === "ADMIN";
 
+  const teacherId =
+    isTeacher
+      ? authSession.user.id
+      : null;
+
   const sessions =
     await prisma.courseSession.findMany({
-      where: isTeacher
+      where: teacherId
         ? {
             teacherId:
-              authSession!.user.id,
+              teacherId,
           }
         : undefined,
   

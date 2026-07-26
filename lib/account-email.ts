@@ -4,6 +4,7 @@ import {
   createPasswordResetToken,
 } from "@/lib/auth-tokens";
 import {
+  type EmailDeliveryResult,
   sendPasswordResetEmail,
   sendVerificationEmail,
 } from "@/lib/email";
@@ -18,7 +19,7 @@ export async function issueEmailVerification({
   email: string;
   firstName: string;
   appUrl: string;
-}) {
+}): Promise<EmailDeliveryResult> {
   const token = createEmailVerificationToken();
 
   await prisma.$transaction([
@@ -36,25 +37,16 @@ export async function issueEmailVerification({
     }),
   ]);
 
-  try {
-    const verificationUrl =
-      `${appUrl}/verify-email?token=` +
-      encodeURIComponent(token.token);
+  const verificationUrl =
+    `${appUrl}/verify-email?token=` +
+    encodeURIComponent(token.token);
 
-    await sendVerificationEmail({
-      email,
-      firstName,
-      verificationUrl,
-      tokenHash: token.tokenHash,
-    });
-  } catch (error) {
-    await prisma.emailVerificationToken.deleteMany({
-      where: {
-        tokenHash: token.tokenHash,
-      },
-    });
-    throw error;
-  }
+  return sendVerificationEmail({
+    email,
+    firstName,
+    verificationUrl,
+    tokenHash: token.tokenHash,
+  });
 }
 
 export async function issuePasswordReset({
@@ -67,7 +59,7 @@ export async function issuePasswordReset({
   email: string;
   firstName: string;
   appUrl: string;
-}) {
+}): Promise<EmailDeliveryResult> {
   const token = createPasswordResetToken();
 
   await prisma.$transaction([
@@ -85,23 +77,14 @@ export async function issuePasswordReset({
     }),
   ]);
 
-  try {
-    const resetUrl =
-      `${appUrl}/reset-password?token=` +
-      encodeURIComponent(token.token);
+  const resetUrl =
+    `${appUrl}/reset-password?token=` +
+    encodeURIComponent(token.token);
 
-    await sendPasswordResetEmail({
-      email,
-      firstName,
-      resetUrl,
-      tokenHash: token.tokenHash,
-    });
-  } catch (error) {
-    await prisma.passwordResetToken.deleteMany({
-      where: {
-        tokenHash: token.tokenHash,
-      },
-    });
-    throw error;
-  }
+  return sendPasswordResetEmail({
+    email,
+    firstName,
+    resetUrl,
+    tokenHash: token.tokenHash,
+  });
 }

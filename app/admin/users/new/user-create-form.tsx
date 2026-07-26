@@ -54,7 +54,18 @@ export default function UserCreateForm() {
     );
 
     if (res.ok) {
-      alert("User created.");
+      const data: unknown =
+        await res.json();
+
+      const message =
+        typeof data === "object" &&
+        data !== null &&
+        "warning" in data &&
+        typeof data.warning === "string"
+          ? data.warning
+          : "User created.";
+
+      alert(message);
 
       router.push("/admin/users");
       router.refresh();
@@ -168,6 +179,10 @@ export default function UserCreateForm() {
           >
             <option value="PARENT">
               Parent
+            </option>
+
+            <option value="ADULT">
+              Adult
             </option>
 
             <option value="STUDENT">

@@ -6,10 +6,9 @@ import {
   normalizeEmail,
 } from "@/lib/auth-tokens";
 import { issueEmailVerification } from "@/lib/account-email";
-import { isEmailConfigured } from "@/lib/email";
 
 const genericMessage =
-  "If that account still needs verification, a new email has been sent.";
+  "If that account still needs verification, a new email will be sent.";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -39,16 +38,6 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!isEmailConfigured()) {
-    return NextResponse.json(
-      {
-        error:
-          "Email service is temporarily unavailable. Please try again later.",
-      },
-      { status: 503 }
-    );
-  }
-
   const user = await prisma.user.findUnique({
     where: {
       email,
@@ -72,24 +61,60 @@ export async function POST(request: Request) {
     },
   });
 
-  if (
-    user &&
-    !user.emailVerified &&
-    user.emailVerificationTokens.length === 0
-  ) {
-    try {
-      await issueEmailVerification({
+  if (!user || user.emailVerified) {
+    return NextResponse.json({
+      message: genericMessage,
+    });
+  }
+
+  if (user.emailVerificationTokens.length > 0) {
+    return NextResponse.json({
+      message:
+        "A verification email was requested recently. Please wait a minute before trying again.",
+    });
+  }
+
+  const delivery =
+    await issueEmailVerification({
+      userId: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      appUrl: getAppUrl(request),
+    });
+
+  if (!delivery.ok) {
+    console.error(
+      "Verification resend was not delivered",
+      {
         userId: user.id,
         email: user.email,
-        firstName: user.firstName,
+        skipped: delivery.skipped,
+        reason: delivery.reason,
+        status:
+          "status" in delivery
+            ? delivery.status
+            : undefined,
+        providerBody:
+          "providerBody" in delivery
+            ? delivery.providerBody
+            : undefined,
         appUrl: getAppUrl(request),
-      });
-    } catch (error) {
-      console.error("Unable to resend verification email", error);
-    }
+      }
+    );
+
+    return NextResponse.json(
+      {
+        error:
+          "We could not send a verification email right now. Please try again later or contact support.",
+      },
+      {
+        status: 502,
+      }
+    );
   }
 
   return NextResponse.json({
-    message: genericMessage,
+    message:
+      "A new verification email has been sent.",
   });
 }

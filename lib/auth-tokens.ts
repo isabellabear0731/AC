@@ -40,9 +40,53 @@ export function createEmailVerificationToken() {
   return createToken(EMAIL_VERIFICATION_TTL_MS);
 }
 
+function normalizeAppUrl(
+  value: string | undefined
+) {
+  const trimmed =
+    value?.trim().replace(/\/$/, "");
+
+  if (!trimmed) {
+    return null;
+  }
+
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://")
+  ) {
+    return trimmed;
+  }
+
+  return `https://${trimmed}`;
+}
+
 export function getAppUrl(request: Request) {
-  return (
-    process.env.NEXTAUTH_URL?.replace(/\/$/, "") ??
-    new URL(request.url).origin
+  const configuredUrl =
+    normalizeAppUrl(process.env.NEXTAUTH_URL) ??
+    normalizeAppUrl(process.env.NEXT_PUBLIC_APP_URL) ??
+    normalizeAppUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
+    normalizeAppUrl(process.env.VERCEL_URL);
+
+  if (configuredUrl) {
+    return configuredUrl;
+  }
+
+  const forwardedHost =
+    request.headers.get("x-forwarded-host");
+
+  if (forwardedHost) {
+    const forwardedProto =
+      request.headers.get("x-forwarded-proto") ??
+      "https";
+
+    return `${forwardedProto}://${forwardedHost}`.replace(
+      /\/$/,
+      ""
+    );
+  }
+
+  return new URL(request.url).origin.replace(
+    /\/$/,
+    ""
   );
 }

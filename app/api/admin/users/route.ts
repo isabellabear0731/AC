@@ -3,6 +3,47 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import {
+  getAppUrl,
+  isValidEmail,
+  isValidPassword,
+  normalizeEmail,
+} from "@/lib/auth-tokens";
+import { issueEmailVerification } from "@/lib/account-email";
+
+type AdminCreateRole =
+  | "PARENT"
+  | "ADULT"
+  | "TEACHER"
+  | "STUDENT"
+  | "ADMIN";
+
+function parseAdminCreateRole(
+  value: unknown
+): AdminCreateRole | null {
+  if (
+    value === "PARENT" ||
+    value === "ADULT" ||
+    value === "TEACHER" ||
+    value === "STUDENT" ||
+    value === "ADMIN"
+  ) {
+    return value;
+  }
+
+  return null;
+}
+
+function getStringField(
+  body: Record<string, unknown>,
+  key: string
+) {
+  const value = body[key];
+
+  return typeof value === "string"
+    ? value.trim()
+    : "";
+}
 
 export async function POST(
   req: Request
@@ -24,13 +65,86 @@ export async function POST(
     );
   }
 
-  const body =
+  const rawBody: unknown =
     await req.json();
+
+  if (
+    typeof rawBody !== "object" ||
+    rawBody === null
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Invalid request.",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const body = rawBody as Record<string, unknown>;
+
+  const role =
+    parseAdminCreateRole(body.role);
+
+  const email =
+    normalizeEmail(
+      getStringField(body, "email")
+    );
+
+  const firstName =
+    getStringField(body, "firstName");
+
+  const lastName =
+    getStringField(body, "lastName");
+
+  const phone =
+    getStringField(body, "phone");
+
+  const password =
+    getStringField(body, "password");
+
+  const parentId =
+    getStringField(body, "parentId");
+
+  if (
+    !role ||
+    !isValidEmail(email) ||
+    !firstName ||
+    !lastName ||
+    !isValidPassword(password)
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Enter valid user details.",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  if (
+    role === "STUDENT" &&
+    !parentId
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Parent required.",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
 
   const existing =
     await prisma.user.findUnique({
       where: {
-        email: body.email,
+        email,
       },
     });
 
@@ -48,51 +162,107 @@ export async function POST(
 
   const passwordHash =
     await bcrypt.hash(
-      body.password,
+      password,
       12
     );
 
   const user =
-    await prisma.user.create({
-      data: {
-        firstName:
-          body.firstName,
-        lastName:
-          body.lastName,
-        email: body.email,
-        phone:
-          body.phone || null,
-        passwordHash,
-        role: body.role,
-        isActive: true,
-        emailVerified: false,
-      },
-    });
+    await prisma.$transaction(
+      async (tx) => {
+        const createdUser =
+          await tx.user.create({
+            data: {
+              firstName,
+              lastName,
+              email,
+              phone:
+                phone || null,
+              passwordHash,
+              role,
+              isActive: true,
+              emailVerified:
+                process.env.NODE_ENV ===
+                "development",
+            },
+          });
 
-  if (body.role === "STUDENT") {
-    if (!body.parentId) {
+        if (role === "STUDENT") {
+          await tx.studentProfile.create({
+            data: {
+              studentUserId:
+                createdUser.id,
+              parentId,
+            },
+          });
+        }
+
+        if (role === "ADULT") {
+          await tx.studentProfile.create({
+            data: {
+              studentUserId:
+                createdUser.id,
+              parentId: null,
+            },
+          });
+        }
+
+        return createdUser;
+      }
+    );
+
+  if (
+    process.env.NODE_ENV !==
+    "development"
+  ) {
+    const delivery =
+      await issueEmailVerification({
+        userId: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        appUrl: getAppUrl(req),
+      });
+
+    if (!delivery.ok) {
+      const warning =
+        "User created, but the verification email could not be delivered. Ask the user to request another verification email from the login page later.";
+
+      console.error(
+        "Admin-created user verification email was not delivered",
+        {
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          skipped: delivery.skipped,
+          reason: delivery.reason,
+          status:
+            "status" in delivery
+              ? delivery.status
+              : undefined,
+          providerBody:
+            "providerBody" in delivery
+              ? delivery.providerBody
+              : undefined,
+          appUrl: getAppUrl(req),
+        }
+      );
+
       return NextResponse.json(
         {
-          error:
-            "Parent required.",
+          success: true,
+          warning,
+          emailDelivered: false,
         },
         {
-          status: 400,
+          status: 201,
         }
       );
     }
-
-    await prisma.studentProfile.create({
-      data: {
-        studentUserId:
-          user.id,
-        parentId:
-          body.parentId,
-      },
-    });
   }
 
   return NextResponse.json({
     success: true,
+    emailDelivered:
+      process.env.NODE_ENV !==
+      "development",
   });
 }

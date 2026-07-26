@@ -124,20 +124,6 @@ export default async function TeacherDashboard() {
             description="Communicate with parents"
           />
 
-          <QuickActionCard
-            href="/students"
-            icon={Users}
-            title="Students"
-            description="View student profiles"
-          />
-
-          <QuickActionCard
-            href="/attendance"
-            icon={ClipboardCheck}
-            title="Attendance"
-            description="Review attendance records"
-          />
-
         </div>
 
       </DashboardSection>

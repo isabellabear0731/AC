@@ -7,6 +7,10 @@ export async function GET(request: Request) {
   const token = requestUrl.searchParams.get("token");
 
   if (!token) {
+    console.warn(
+      "Email verification attempted without a token"
+    );
+
     return NextResponse.redirect(
       new URL("/login?verification=invalid", requestUrl)
     );
@@ -25,12 +29,25 @@ export async function GET(request: Request) {
     });
 
   if (!verificationToken) {
+    console.warn(
+      "Email verification token was not found"
+    );
+
     return NextResponse.redirect(
       new URL("/login?verification=invalid", requestUrl)
     );
   }
 
   if (verificationToken.expiresAt <= new Date()) {
+    console.warn(
+      "Email verification token expired",
+      {
+        userId: verificationToken.userId,
+        expiresAt:
+          verificationToken.expiresAt.toISOString(),
+      }
+    );
+
     await prisma.emailVerificationToken.deleteMany({
       where: {
         tokenHash,
@@ -73,11 +90,29 @@ export async function GET(request: Request) {
         },
       });
     });
-  } catch {
+  } catch (error) {
+    console.error(
+      "Email verification failed while consuming token",
+      {
+        userId: verificationToken.userId,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unknown error",
+      }
+    );
+
     return NextResponse.redirect(
       new URL("/login?verification=invalid", requestUrl)
     );
   }
+
+  console.info(
+    "Email verified successfully",
+    {
+      userId: verificationToken.userId,
+    }
+  );
 
   return NextResponse.redirect(
     new URL("/login?verification=success", requestUrl)

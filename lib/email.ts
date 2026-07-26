@@ -6,6 +6,24 @@ type EmailOptions = {
   idempotencyKey: string;
 };
 
+export type EmailDeliveryResult =
+  | {
+      ok: true;
+      emailId: string | null;
+    }
+  | {
+      ok: false;
+      skipped: true;
+      reason: string;
+    }
+  | {
+      ok: false;
+      skipped: false;
+      status?: number;
+      reason: string;
+      providerBody?: string;
+    };
+
 export function isEmailConfigured() {
   return Boolean(
     process.env.RESEND_API_KEY && process.env.EMAIL_FROM
@@ -26,40 +44,173 @@ function escapeHtml(value: string) {
   );
 }
 
-async function sendEmail(options: EmailOptions) {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-
-  if (!isEmailConfigured() || !apiKey || !from) {
-    console.warn(
-      "Email not configured. Skipping email."
-    );
-  
+function logEmailFailure(
+  options: EmailOptions,
+  result: EmailDeliveryResult
+) {
+  if (result.ok) {
     return;
   }
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
+  console.error(
+    "Email delivery failed",
+    {
+      to: options.to,
+      subject: options.subject,
+      idempotencyKey: options.idempotencyKey,
+      skipped: result.skipped,
+      status:
+        "status" in result
+          ? result.status
+          : undefined,
+      reason: result.reason,
+      providerBody:
+        "providerBody" in result
+          ? result.providerBody
+          : undefined,
+      nodeEnv: process.env.NODE_ENV,
+      hasResendApiKey:
+        Boolean(process.env.RESEND_API_KEY),
+      hasEmailFrom:
+        Boolean(process.env.EMAIL_FROM),
+      emailFrom:
+        process.env.EMAIL_FROM,
+    }
+  );
+}
+
+function parseEmailId(
+  value: unknown
+) {
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    typeof value.id === "string"
+  ) {
+    return value.id;
+  }
+
+  return null;
+}
+
+function normalizeIdempotencyKey(
+  value: string
+) {
+  if (value.length <= 256) {
+    return value;
+  }
+
+  return value.slice(0, 256);
+}
+
+async function sendEmail(
+  options: EmailOptions
+): Promise<EmailDeliveryResult> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  const idempotencyKey =
+    normalizeIdempotencyKey(
+      options.idempotencyKey
+    );
+
+  if (!isEmailConfigured() || !apiKey || !from) {
+    const result: EmailDeliveryResult = {
+      ok: false,
+      skipped: true,
+      reason:
+        "Email not configured. Skipping verification email.",
+    };
+
+    console.warn(result.reason, {
+      to: options.to,
+      subject: options.subject,
+      nodeEnv: process.env.NODE_ENV,
+      hasResendApiKey: Boolean(apiKey),
+      hasEmailFrom: Boolean(from),
+    });
+
+    return result;
+  }
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      "Idempotency-Key": options.idempotencyKey,
-    },
-    body: JSON.stringify({
-      from,
-      to: [options.to],
-      subject: options.subject,
-      html: options.html,
-      text: options.text,
-    }),
-    cache: "no-store",
-  });
+      "Idempotency-Key": idempotencyKey,
+      },
+      body: JSON.stringify({
+        from,
+        to: [options.to],
+        subject: options.subject,
+        html: options.html,
+        text: options.text,
+      }),
+      cache: "no-store",
+    });
 
-  if (!response.ok) {
-    const responseBody = await response.text();
-    throw new Error(
-      `Email provider returned ${response.status}: ${responseBody}`
+    const responseBody =
+      await response.text();
+
+    if (!response.ok) {
+      const result: EmailDeliveryResult = {
+        ok: false,
+        skipped: false,
+        status: response.status,
+        reason:
+          `Email provider returned ${response.status}.`,
+        providerBody: responseBody,
+      };
+
+      logEmailFailure(options, result);
+
+      return result;
+    }
+
+    let parsedResponse: unknown = null;
+
+    if (responseBody) {
+      try {
+        parsedResponse =
+          JSON.parse(responseBody);
+      } catch {
+        parsedResponse = null;
+      }
+    }
+
+    const emailId =
+      parseEmailId(parsedResponse);
+
+    console.info(
+      "Email accepted by provider",
+      {
+        to: options.to,
+        subject: options.subject,
+        idempotencyKey:
+          idempotencyKey,
+        emailId,
+      }
     );
+
+    return {
+      ok: true,
+      emailId,
+    };
+  } catch (error) {
+    const result: EmailDeliveryResult = {
+      ok: false,
+      skipped: false,
+      reason:
+        error instanceof Error
+          ? error.message
+          : "Email provider request failed.",
+    };
+
+    logEmailFailure(options, result);
+
+    return result;
   }
 }
 
@@ -77,7 +228,7 @@ export async function sendVerificationEmail({
   const safeName = escapeHtml(firstName);
   const safeUrl = escapeHtml(verificationUrl);
 
-  await sendEmail({
+  return sendEmail({
     to: email,
     subject: "Verify your Gifted People Services email",
     idempotencyKey: `verify-${tokenHash}`,
@@ -114,7 +265,7 @@ export async function sendPasswordResetEmail({
   const safeName = escapeHtml(firstName);
   const safeUrl = escapeHtml(resetUrl);
 
-  await sendEmail({
+  return sendEmail({
     to: email,
     subject: "Reset your Gifted People Services password",
     idempotencyKey: `reset-${tokenHash}`,
@@ -149,7 +300,7 @@ export async function sendRegistrationApprovedEmail({
   const safeName = escapeHtml(firstName);
   const safeCourse = escapeHtml(course);
 
-  await sendEmail({
+  return sendEmail({
     to: email,
     subject: "Registration Approved",
     idempotencyKey: `registration-approved-${email}-${course}`,
@@ -190,7 +341,7 @@ export async function sendRegistrationRejectedEmail({
   const safeCourse = escapeHtml(course);
   const safeReason = escapeHtml(reason);
 
-  await sendEmail({
+  return sendEmail({
     to: email,
     subject: "Registration Update",
     idempotencyKey: `registration-rejected-${email}-${course}`,
@@ -240,7 +391,7 @@ export async function sendRegistrationWaitlistEmail({
   const safeName = escapeHtml(firstName);
   const safeCourse = escapeHtml(course);
 
-  await sendEmail({
+  return sendEmail({
     to: email,
     subject: "Registration Waitlisted",
     idempotencyKey: `registration-waitlist-${email}-${course}`,
@@ -290,7 +441,7 @@ export async function sendRegistrationCancelledEmail({
   const safeName = escapeHtml(firstName);
   const safeCourse = escapeHtml(course);
 
-  await sendEmail({
+  return sendEmail({
     to: email,
     subject: "Registration Cancelled",
     idempotencyKey: `registration-cancelled-${email}-${course}`,

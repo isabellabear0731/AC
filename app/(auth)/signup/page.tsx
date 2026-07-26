@@ -17,6 +17,7 @@ export default function SignupPage() {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(
@@ -24,6 +25,7 @@ export default function SignupPage() {
   ) {
     event.preventDefault();
     setError("");
+    setNotice("");
 
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match.");
@@ -55,6 +57,23 @@ export default function SignupPage() {
       return;
     }
 
+    if (
+      typeof data.warning === "string" &&
+      data.warning
+    ) {
+      setNotice(data.warning);
+      setForm({
+        role: "PARENT",
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+      });
+      return;
+    }
+
     window.location.href = "/login?signup=check-email";
   }
 
@@ -83,6 +102,21 @@ export default function SignupPage() {
           className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
         >
           {error}
+        </div>
+      )}
+
+      {notice && (
+        <div
+          role="status"
+          className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+        >
+          {notice}
+          <Link
+            href="/login"
+            className="mt-2 block font-semibold underline"
+          >
+            Go to login
+          </Link>
         </div>
       )}
 
