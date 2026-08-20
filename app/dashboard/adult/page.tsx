@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 import LogoutButton from "@/components/logout-button";
 import NotificationBell from "@/components/notification-bell";
@@ -75,12 +76,12 @@ export default async function AdultDashboard() {
               adult learner profile.
             </p>
 
-            <a
+            <Link
               href="/messages/new"
               className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90"
             >
               Contact Administrator
-            </a>
+            </Link>
           </div>
         </DashboardSection>
       </PageContainer>

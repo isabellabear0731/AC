@@ -125,7 +125,7 @@ export default async function ChildPage({
           </h1>
 
           <p className="mt-2 text-gray-500">
-            View your child's schedule,
+            View your child&apos;s schedule,
             attendance, and learning
             progress.
           </p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function RegisterForm({
   sessionId,
@@ -29,17 +29,6 @@ export default function RegisterForm({
     useState(
       adultProfile?.id ?? ""
     );
-
-  useEffect(() => {
-    if (
-      isAdult &&
-      adultProfile
-    ) {
-      setStudentId(
-        adultProfile.id
-      );
-    }
-  }, [adultProfile, isAdult]);
 
   async function register() {
     const payload =

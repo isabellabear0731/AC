@@ -15,9 +15,7 @@ import { roleTheme } from "@/lib/theme";
 
 import {
   CalendarDays,
-  ClipboardCheck,
   MessageCircle,
-  Users,
 } from "lucide-react";
 
 import Link from "next/link";

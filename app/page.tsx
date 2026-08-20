@@ -124,7 +124,7 @@ export default function Home() {
           <p className="mt-4 text-lg text-gray-500">
 
             Designed to simplify learning management
-            while supporting every student's growth.
+            while supporting every student&apos;s growth.
 
           </p>
 
@@ -389,4 +389,4 @@ function StatCard({
     </div>
   );
 }
-      
+

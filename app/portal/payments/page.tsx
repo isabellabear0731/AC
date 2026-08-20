@@ -8,7 +8,6 @@ import {
   Receipt,
   GraduationCap,
   CalendarDays,
-  User,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";

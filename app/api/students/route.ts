@@ -71,7 +71,19 @@ export async function POST(req: Request) {
       },
     });
 
-    const { passwordHash: _, ...safeStudent } = student;
+    const safeStudent = {
+      id: student.id,
+      email: student.email,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      phone: student.phone,
+      role: student.role,
+      isActive: student.isActive,
+      emailVerified: student.emailVerified,
+      createdAt: student.createdAt,
+      updatedAt: student.updatedAt,
+      studentProfile: student.studentProfile,
+    };
 
     return NextResponse.json(safeStudent);
   } catch (error) {

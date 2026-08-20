@@ -18,11 +18,11 @@ export default function NotFound() {
         </div>
 
         <h1 className="mt-8 text-4xl font-bold">
-            Oops! We couldn't find that page.
+          Oops! We couldn&apos;t find that page.
         </h1>
 
         <p className="mt-4 text-gray-500">
-          Sorry, we couldn't find the page you're looking for.
+          Sorry, we couldn&apos;t find the page you&apos;re looking for.
           It may have been moved or no longer exists.
         </p>
 

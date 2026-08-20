@@ -143,7 +143,7 @@ export default async function PortalMaterialsPage() {
           </h2>
 
           <p className="mt-3 text-gray-500">
-            Learning materials will appear once you're enrolled in a course.
+            Learning materials will appear once you&apos;re enrolled in a course.
           </p>
 
         </div>

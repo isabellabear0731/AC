@@ -3,6 +3,9 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import NotificationCard from "@/components/notification-card";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { getDashboardHref } from "@/lib/role-navigation";
 
 export default async function NotificationsPage() {
   const session =
@@ -11,6 +14,9 @@ export default async function NotificationsPage() {
   if (!session) {
     redirect("/login");
   }
+
+  const dashboardHref =
+    getDashboardHref(session.user.role);
 
   const notifications =
   await prisma.notification.findMany({
@@ -30,14 +36,26 @@ export default async function NotificationsPage() {
         background: "#F8F8F3",
       }}
     >
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold">
-          Notifications
-        </h1>
-  
-        <p className="mt-2 text-gray-500">
-          Stay updated with your courses and center activities.
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            href={dashboardHref}
+            className="rounded-xl border bg-white p-3 shadow-sm transition hover:bg-gray-50"
+            aria-label="Back to dashboard"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+
+          <div>
+            <h1 className="text-4xl font-bold">
+              Notifications
+            </h1>
+
+            <p className="mt-2 text-gray-500">
+              Stay updated with your courses and center activities.
+            </p>
+          </div>
+        </div>
       </div>
   
       {notifications.length === 0 ? (
@@ -45,7 +63,7 @@ export default async function NotificationsPage() {
         <div className="rounded-3xl border bg-white p-12 text-center shadow-sm">
   
           <h2 className="text-2xl font-semibold">
-            You're all caught up!
+            You&apos;re all caught up!
           </h2>
   
           <p className="mt-3 text-gray-500">

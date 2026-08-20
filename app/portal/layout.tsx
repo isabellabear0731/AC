@@ -2,6 +2,10 @@ import Link from "next/link";
 
 import { PortalProvider } from "@/components/portal/PortalProvider";
 import { getPortalContext } from "@/lib/portal";
+import {
+  getDashboardHref,
+  getPortalLabel,
+} from "@/lib/role-navigation";
 
 export default async function PortalLayout({
   children,
@@ -10,6 +14,12 @@ export default async function PortalLayout({
 }) {
   const portal =
     await getPortalContext();
+
+  const dashboardHref =
+    getDashboardHref(portal.role);
+
+  const portalLabel =
+    getPortalLabel(portal.role);
 
   return (
     <PortalProvider
@@ -48,9 +58,13 @@ export default async function PortalLayout({
 
           <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
 
-            <h1 className="text-2xl font-bold">
-              Student Portal
-            </h1>
+            <Link
+              href={dashboardHref}
+              aria-label={`${portalLabel} home`}
+              className="text-2xl font-bold transition hover:text-[#7AAACD]"
+            >
+              {portalLabel}
+            </Link>
 
             <nav className="flex gap-6 text-sm font-medium">
 
@@ -78,7 +92,7 @@ export default async function PortalLayout({
                 Messages
               </Link>
 
-              <Link href="/dashboard">
+              <Link href={dashboardHref}>
                 Dashboard
               </Link>
 

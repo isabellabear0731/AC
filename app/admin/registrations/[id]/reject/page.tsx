@@ -76,7 +76,7 @@ export default async function RejectRegistrationPage({
 
           <p className="mt-2 text-gray-500">
             This reason will be saved and shown in the
-            parent's notification and email.
+            parent&apos;s notification and email.
           </p>
 
         </div>

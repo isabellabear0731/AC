@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 import LogoutButton from "@/components/logout-button";
 import NotificationBell from "@/components/notification-bell";
@@ -68,15 +69,15 @@ export default async function ParentDashboard() {
       <DashboardSection title="My Children">
         <div className="mb-6 flex items-center justify-between">
           <p className="text-gray-500">
-            Manage your children's profiles.
+            Manage your children&apos;s profiles.
           </p>
 
-          <a
+          <Link
             href="/parent/children/new"
             className="rounded-xl bg-[#7AAACD] px-4 py-2 text-white hover:opacity-90"
           >
             + Add Child
-          </a>
+          </Link>
         </div>
 
         {!parent || parent.children.length === 0 ? (
@@ -91,12 +92,12 @@ export default async function ParentDashboard() {
                 account.
               </p>
 
-              <a
+              <Link
                 href="/parent/children/new"
                 className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90"
               >
                 Add Your First Child
-              </a>
+              </Link>
             </div>
           </div>
         ) : (

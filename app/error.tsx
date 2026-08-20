@@ -28,7 +28,7 @@ export default function Error({
         </div>
 
         <h1 className="mt-8 text-4xl font-bold">
-         We're Sorry!
+          We&apos;re Sorry!
         </h1>
 
         <p className="mt-4 text-gray-500">

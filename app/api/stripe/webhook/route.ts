@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         signature,
         webhookSecret
       );
-  } catch (err) {
+  } catch {
     return new NextResponse(
       "Webhook Error",
       { status: 400 }

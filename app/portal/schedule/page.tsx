@@ -140,7 +140,7 @@ export default async function PortalSchedulePage() {
             </h3>
 
             <p className="mt-3 text-gray-500">
-              Once you're registered for classes, they will appear here automatically.
+              Once you&apos;re registered for classes, they will appear here automatically.
             </p>
 
           </div>
