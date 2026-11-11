@@ -24,6 +24,7 @@ export const prisma =
     adapter,
   });
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+// Reuse the client in every server runtime. This avoids creating additional
+// database pools during warm Vercel invocations while preserving request-level
+// authorization in callers.
+globalForPrisma.prisma = prisma;

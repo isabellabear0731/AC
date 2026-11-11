@@ -1,9 +1,23 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
+import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export default async function CourseCategoriesPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  if (session.user.role !== "ADMIN") {
+    redirect("/dashboard");
+  }
+
   const categories =
   await prisma.courseCategory.findMany({
     include: {
@@ -25,7 +39,8 @@ export default async function CourseCategoriesPage() {
   });
 
   return (
-    <div className="mb-8 flex items-center justify-between">
+    <div>
+      <div className="mb-8 flex items-center justify-between">
 
       <div>
         <h1 className="text-4xl font-bold">
@@ -55,7 +70,9 @@ export default async function CourseCategoriesPage() {
 
       </div>
 
-      <div className="rounded-xl border bg-white">
+      </div>
+
+      <div className="overflow-hidden rounded-xl border bg-white">
         <table className="w-full">
           <thead className="border-b bg-gray-50">
             <tr>
@@ -92,10 +109,6 @@ export default async function CourseCategoriesPage() {
                     {category.name}
                   </td>
                   <td className="p-4">
-                      {category._count.courses}
-                  </td>
-
-                  <td className="p-4">
                     <div className="flex items-center gap-2">
                       <div
                         className="h-5 w-5 rounded-full border"
@@ -115,6 +128,10 @@ export default async function CourseCategoriesPage() {
                     {category.isActive
                       ? "Active"
                       : "Inactive"}
+                  </td>
+
+                  <td className="p-4">
+                    {category._count.courses}
                   </td>
 
                   <td className="p-4 text-right">

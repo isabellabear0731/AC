@@ -30,8 +30,10 @@ export default async function MaterialsPage({
 
   const { id } = await params;
 
-  const courseSession =
-    await prisma.courseSession.findUnique({
+  let courseSession;
+
+  try {
+    courseSession = await prisma.courseSession.findUnique({
       where: {
         id,
       },
@@ -52,6 +54,23 @@ export default async function MaterialsPage({
         },
       },
     });
+  } catch (error) {
+    console.error("Teaching resources page failed to load", {
+      actorId: session.user.id,
+      sessionId: id,
+      error,
+    });
+
+    return (
+      <div className="min-h-screen p-8" style={{ background: "#F8F8F3" }}>
+        <div className="mx-auto max-w-xl rounded-3xl border bg-white p-8 text-center shadow-sm">
+          <h1 className="text-2xl font-semibold">Teaching resources are temporarily unavailable</h1>
+          <p className="mt-3 text-gray-500">We could not load this teaching session. Please try again shortly.</p>
+          <Link href="/dashboard/teacher" className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-5 py-3 text-white">Back to Dashboard</Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!courseSession) {
     notFound();

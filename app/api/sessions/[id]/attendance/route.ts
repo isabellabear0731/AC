@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { AttendanceStatus } from "@prisma/client";
+import { studentIsRegisteredForSession } from "@/lib/teacher-access";
 
 const attendanceStatuses = new Set(
   Object.values(AttendanceStatus)
@@ -63,40 +64,31 @@ export async function POST(
     }
   }
 
-  const existing =
-    await prisma.attendance.findUnique({
-      where: {
-        studentId_sessionId: {
-          studentId,
-          sessionId,
-        },
-      },
-    });
-
-  if (existing) {
-    const attendance =
-      await prisma.attendance.update({
-        where: {
-          id: existing.id,
-        },
-        data: {
-          status,
-          editedById: authSession.user.id,
-        },
-      });
-
-    return NextResponse.json(attendance);
+  if (!(await studentIsRegisteredForSession(studentId, sessionId))) {
+    return NextResponse.json(
+      { error: "This student is not registered for the teaching session." },
+      { status: 403 }
+    );
   }
 
-  const attendance =
-    await prisma.attendance.create({
-      data: {
+  const attendance = await prisma.attendance.upsert({
+    where: {
+      studentId_sessionId: {
         studentId,
         sessionId,
-        status,
-        editedById: authSession.user.id,
       },
-    });
+    },
+    update: {
+      status,
+      editedById: authSession.user.id,
+    },
+    create: {
+      studentId,
+      sessionId,
+      status,
+      editedById: authSession.user.id,
+    },
+  });
 
   return NextResponse.json(attendance);
 }

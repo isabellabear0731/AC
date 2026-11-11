@@ -88,9 +88,11 @@ export default async function PortalLayout({
                 Payments
               </Link>
 
-              <Link href="/messages">
-                Messages
-              </Link>
+              {portal.role !== "STUDENT" && (
+                <Link href="/messages">
+                  Messages
+                </Link>
+              )}
 
               <Link href={dashboardHref}>
                 Dashboard

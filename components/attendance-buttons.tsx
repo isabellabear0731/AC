@@ -34,7 +34,8 @@ export default function AttendanceButtons({
     if (res.ok) {
       window.location.reload();
     } else {
-      alert("Failed");
+      const payload = await res.json().catch(() => null);
+      alert(payload?.error ?? "Unable to update attendance.");
     }
 
 
@@ -63,6 +64,9 @@ export default function AttendanceButtons({
   
     if (res.ok) {
       window.location.reload();
+    } else {
+      const payload = await res.json().catch(() => null);
+      alert(payload?.error ?? "Unable to update check-in status.");
     }
   }
 

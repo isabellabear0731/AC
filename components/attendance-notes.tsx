@@ -42,6 +42,9 @@ export default function AttendanceNotes({
     if (res.ok) {
       alert("Saved");
       window.location.reload();
+    } else {
+      const payload = await res.json().catch(() => null);
+      alert(payload?.error ?? "Unable to save attendance notes.");
     }
   }
 

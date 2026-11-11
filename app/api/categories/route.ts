@@ -4,6 +4,15 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user.role !== "ADMIN") {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
     const categories =
       await prisma.courseCategory.findMany({
@@ -27,7 +36,7 @@ export async function GET() {
 
     return NextResponse.json(categories);
   } catch (error) {
-    console.error(error);
+    console.error("Category list failed", { error });
 
     return NextResponse.json(
       {
@@ -64,11 +73,37 @@ export async function POST(
     const body =
       await request.json();
 
+    const name =
+      typeof body.name === "string"
+        ? body.name.trim()
+        : "";
+
+    if (!name || name.length > 100) {
+      return NextResponse.json(
+        {
+          error:
+            "A category name between 1 and 100 characters is required.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (
+      body.color &&
+      (typeof body.color !== "string" ||
+        !/^#[0-9a-fA-F]{6}$/.test(body.color))
+    ) {
+      return NextResponse.json(
+        { error: "Color must be a valid hexadecimal color." },
+        { status: 400 }
+      );
+    }
+
     const existing =
       await prisma.courseCategory.findFirst({
         where: {
           name: {
-            equals: body.name.trim(),
+            equals: name,
             mode: "insensitive",
           },
         },
@@ -89,7 +124,7 @@ export async function POST(
     const category =
       await prisma.courseCategory.create({
         data: {
-          name: body.name.trim(),
+          name,
           color:
             body.color || "#7AAACD",
           sortOrder:
@@ -106,7 +141,7 @@ export async function POST(
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Category create failed", { error });
 
     return NextResponse.json(
       {

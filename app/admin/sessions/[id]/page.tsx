@@ -31,8 +31,10 @@ export default async function SessionPage({
 
   const { id } = await params;
 
-  const session =
-    await prisma.courseSession.findUnique({
+  let session;
+
+  try {
+    session = await prisma.courseSession.findUnique({
       where: {
         id,
       },
@@ -65,6 +67,23 @@ export default async function SessionPage({
         teachingResources: true,
       },
     });
+  } catch (error) {
+    console.error("Session attendance page failed to load", {
+      actorId: authSession.user.id,
+      sessionId: id,
+      error,
+    });
+
+    return (
+      <div className="min-h-screen p-8" style={{ background: "#F8F8F3" }}>
+        <div className="mx-auto max-w-xl rounded-3xl border bg-white p-8 text-center shadow-sm">
+          <h1 className="text-2xl font-semibold">Attendance is temporarily unavailable</h1>
+          <p className="mt-3 text-gray-500">We could not load this teaching session. Please try again shortly.</p>
+          <Link href="/dashboard/teacher" className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-5 py-3 text-white">Back to Dashboard</Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!session) {
     notFound();
@@ -134,7 +153,7 @@ export default async function SessionPage({
         </div>
 
         <Link
-          href={`/admin/courses/${session.courseId}`}
+          href={authSession.user.role === "TEACHER" ? "/dashboard/teacher" : `/admin/courses/${session.courseId}`}
           className="rounded-xl border bg-white px-5 py-2 hover:bg-gray-50"
         >
           ← Back to Course
@@ -419,7 +438,7 @@ export default async function SessionPage({
                 <div className="mt-6 flex flex-wrap gap-3">
 
                   <Link
-                    href={`/admin/users/${registration.student.studentUser.id}`}
+                    href={authSession.user.role === "TEACHER" ? `/students/${registration.student.id}` : `/admin/users/${registration.student.studentUser.id}`}
                     className="rounded-xl border px-4 py-2 hover:bg-gray-50"
                   >
                     Student Profile
@@ -593,7 +612,7 @@ Manage Materials
 <div className="mt-10 flex flex-wrap justify-between gap-4">
 
 <Link
-href={`/admin/courses/${session.courseId}`}
+href={authSession.user.role === "TEACHER" ? "/dashboard/teacher" : `/admin/courses/${session.courseId}`}
 className="rounded-xl border bg-white px-5 py-3 hover:bg-gray-50"
 >
 ← Back to Course

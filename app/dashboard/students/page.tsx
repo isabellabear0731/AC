@@ -17,8 +17,6 @@ import {
   CalendarDays,
   ClipboardCheck,
   FileText,
-  MessageCircle,
-  BarChart3,
 } from "lucide-react";
 
 export default async function StudentDashboard() {
@@ -91,19 +89,6 @@ export default async function StudentDashboard() {
             description="View learning materials uploaded by your teachers."
           />
 
-          <QuickActionCard
-            href="/portal/messages"
-            icon={MessageCircle}
-            title="Messages"
-            description="Read teacher feedback and messages"
-          />
-
-          <QuickActionCard
-            href="/profile"
-            icon={BarChart3}
-            title="My Progress"
-            description="View your learning progress"
-          />
         </div>
       </DashboardSection>
 

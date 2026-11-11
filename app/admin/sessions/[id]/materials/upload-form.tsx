@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function UploadForm({
@@ -28,27 +28,31 @@ export default function UploadForm({
 
   const [uploading, setUploading] =
     useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const uploadId = useRef<string | null>(null);
 
   async function handleSubmit(
     e: React.FormEvent
   ) {
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
 
     if (!file) {
-      alert("Please select a file.");
+      setError("Please select a file.");
       return;
     }
     
     const MAX_SIZE = 30 * 1024 * 1024; // 30 MB
     
     if (file.size > MAX_SIZE) {
-      alert(
-        "Files larger than 30 MB are not supported. Please compress the file or split it into multiple files before uploading."
-      );
+      setError("Files larger than 30 MB are not supported. Please compress the file or split it before uploading.");
       return;
     }
 
     setUploading(true);
+    uploadId.current ??= crypto.randomUUID();
 
     try {
 
@@ -62,6 +66,8 @@ export default function UploadForm({
           "resourceType",
           resourceType
         );
+        uploadData.append("sessionId", sessionId);
+        uploadData.append("uploadId", uploadId.current);
 
         const uploadResponse =
           await fetch(
@@ -73,7 +79,8 @@ export default function UploadForm({
           );
 
         if (!uploadResponse.ok) {
-          throw new Error("Upload failed.");
+          const payload = await uploadResponse.json().catch(() => null);
+          throw new Error(payload?.error ?? "Upload failed.");
         }
 
         const uploaded =
@@ -108,27 +115,22 @@ export default function UploadForm({
         );
 
       if (!resourceResponse.ok) {
-        throw new Error(
-          "Failed to save resource."
-        );
+        const payload = await resourceResponse.json().catch(() => null);
+        throw new Error(payload?.error ?? "Failed to save resource.");
       }
 
-      alert(
-        "Resource uploaded successfully."
-      );
+      setSuccess("Resource uploaded successfully.");
 
       router.refresh();
 
       setTitle("");
       setDescription("");
       setFile(null);
+      uploadId.current = null;
 
     } catch (err) {
-      console.error(err);
-
-      alert(
-        "Upload failed."
-      );
+      console.error("Teaching resource upload failed", err);
+      setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
     }
 
     setUploading(false);
@@ -275,6 +277,11 @@ export default function UploadForm({
 
         </label>
 
+      </div>
+
+      <div aria-live="polite">
+        {error && <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        {success && <p className="rounded-xl bg-green-50 p-3 text-sm text-green-700">{success}</p>}
       </div>
 
       <button
