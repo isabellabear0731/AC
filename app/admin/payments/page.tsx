@@ -81,7 +81,7 @@ export default async function AdminPaymentsPage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -133,7 +133,7 @@ export default async function AdminPaymentsPage({
         title="Revenue"
         value={`$${revenue}`}
         icon={
-          <Receipt className="h-5 w-5 text-[#7AAACD]" />
+          <Receipt className="h-5 w-5 text-[#4D9632]" />
         }
       />
 
@@ -195,9 +195,9 @@ export default async function AdminPaymentsPage({
 
                 <div className="flex items-center gap-4">
 
-                  <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
+                  <div className="rounded-2xl bg-[#4D9632]/10 p-3">
 
-                    <User className="h-7 w-7 text-[#7AAACD]" />
+                    <User className="h-7 w-7 text-[#4D9632]" />
 
                   </div>
 
@@ -375,7 +375,7 @@ function FilterButton({
       href={href}
       className={`rounded-full px-4 py-2 text-sm font-medium transition ${
         active
-          ? "bg-[#7AAACD] text-white"
+          ? "bg-[#4D9632] text-white"
           : "border bg-white hover:bg-gray-50"
       }`}
     >

@@ -56,7 +56,7 @@ export default async function CourseCategoriesPage() {
 
         <Link
           href="/admin/categories/new"
-          className="rounded-xl bg-[#7AAACD] px-5 py-2 text-white"
+          className="rounded-xl bg-[#4D9632] px-5 py-2 text-white"
         >
           + New Category
         </Link>

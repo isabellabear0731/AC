@@ -68,10 +68,10 @@ export default function NotificationCard({
 
   return (
     <div
-      className={`rounded-3xl border shadow-sm transition-all ${
+      className={`rounded-3xl border shadow-[0_8px_20px_rgba(21,60,42,0.05)] transition-all ${
         isRead
           ? "bg-white"
-          : "border-blue-300 bg-blue-50"
+          : "border-[#b9d5a9] bg-[#f7fbf2]"
       }`}
     >
       <button
@@ -83,14 +83,14 @@ export default function NotificationCard({
             className={`rounded-full p-3 ${
               isRead
                 ? "bg-gray-100"
-                : "bg-blue-100"
+                : "bg-[#e0efd6]"
             }`}
           >
             <Bell
               className={`h-5 w-5 ${
                 isRead
-                  ? "text-gray-600"
-                  : "text-blue-700"
+                ? "text-gray-600"
+                : "text-[#36721f]"
               }`}
             />
           </div>
@@ -110,7 +110,7 @@ export default function NotificationCard({
 
         <div className="flex items-center gap-3">
           {!isRead && (
-            <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white">
+            <span className="rounded-full bg-[#4d9632] px-3 py-1 text-xs font-semibold text-white">
               NEW
             </span>
           )}

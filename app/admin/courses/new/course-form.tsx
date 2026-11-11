@@ -58,7 +58,7 @@ export default function NewCoursePage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mx-auto max-w-3xl">
@@ -251,7 +251,7 @@ export default function NewCoursePage({
             <button
               className="rounded-xl px-6 py-3 text-white transition hover:opacity-90"
               style={{
-                background: "#7AAACD",
+                background: "#4D9632",
               }}
             >
               Create Course

@@ -91,7 +91,7 @@ export default function RegisterForm({
           </div>
         ) : (
           <select
-            className="w-full rounded border p-2"
+            className="w-full rounded-xl border p-3"
             value={studentId}
             onChange={(e) =>
               setStudentId(
@@ -143,7 +143,7 @@ export default function RegisterForm({
       <button
         onClick={register}
         disabled={!studentId}
-        className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+        className="rounded-xl bg-[#4d9632] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#36721f] disabled:opacity-50"
       >
         Confirm Registration
       </button>

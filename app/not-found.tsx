@@ -1,23 +1,26 @@
 import Link from "next/link";
 import { SearchX } from "lucide-react";
+import BrandLogo from "@/components/brand-logo";
 
 export default function NotFound() {
   return (
     <div
       className="flex min-h-screen items-center justify-center p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
-      <div className="w-full max-w-lg rounded-3xl border bg-white p-12 text-center shadow-sm">
+      <div className="w-full max-w-lg rounded-[2rem] border border-[#dce7d5] bg-white p-8 text-center shadow-[0_20px_55px_rgba(29,70,36,0.14)] sm:p-12">
 
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#7AAACD]/10">
+        <BrandLogo compact className="mx-auto mb-8" />
 
-          <SearchX className="h-10 w-10 text-[#7AAACD]" />
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#4D9632]/10">
+
+          <SearchX className="h-10 w-10 text-[#4D9632]" />
 
         </div>
 
-        <h1 className="mt-8 text-4xl font-bold">
+        <h1 className="gps-heading mt-8 text-4xl font-bold">
           Oops! We couldn&apos;t find that page.
         </h1>
 
@@ -30,7 +33,7 @@ export default function NotFound() {
 
           <Link
             href="/dashboard"
-            className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white transition hover:opacity-90"
+            className="rounded-xl bg-[#4D9632] px-6 py-3 text-white transition hover:opacity-90"
           >
             Go to Dashboard
           </Link>

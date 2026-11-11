@@ -33,7 +33,7 @@ export default async function NotificationsPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mb-8 flex items-center justify-between">

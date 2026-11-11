@@ -74,7 +74,7 @@ export default async function UserDetailPage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}

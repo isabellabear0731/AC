@@ -23,9 +23,9 @@ export default async function NotificationBell() {
   return (
     <Link
       href="/notifications"
-      className="relative flex h-11 w-11 items-center justify-center rounded-full border bg-white shadow-sm transition hover:bg-gray-50"
+      className="relative flex h-11 w-11 items-center justify-center rounded-full border border-[#dce7d5] bg-white shadow-sm transition hover:bg-[#eff6e8]"
     >
-      <Bell className="h-5 w-5 text-gray-700" />
+      <Bell className="h-5 w-5 text-[#36721f]" />
 
       {count > 0 && (
         <span className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold text-white">

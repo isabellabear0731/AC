@@ -74,7 +74,7 @@ export default async function ParentDashboard() {
 
           <Link
             href="/parent/children/new"
-            className="rounded-xl bg-[#7AAACD] px-4 py-2 text-white hover:opacity-90"
+            className="rounded-xl bg-[#4D9632] px-4 py-2 text-white hover:opacity-90"
           >
             + Add Child
           </Link>
@@ -94,7 +94,7 @@ export default async function ParentDashboard() {
 
               <Link
                 href="/parent/children/new"
-                className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90"
+                className="mt-6 inline-block rounded-xl bg-[#4D9632] px-6 py-3 text-white hover:opacity-90"
               >
                 Add Your First Child
               </Link>

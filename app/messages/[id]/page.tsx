@@ -49,7 +49,7 @@ export default async function MessagePage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mb-8 flex items-center justify-between">
@@ -85,9 +85,9 @@ export default async function MessagePage({
 
           <div className="flex items-center gap-4">
 
-            <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
+            <div className="rounded-2xl bg-[#4D9632]/10 p-3">
 
-              <User className="h-8 w-8 text-[#7AAACD]" />
+              <User className="h-8 w-8 text-[#4D9632]" />
 
             </div>
 
@@ -116,7 +116,7 @@ export default async function MessagePage({
 
           <div className="flex">
 
-            <div className="max-w-2xl rounded-3xl bg-[#7AAACD]/10 p-6">
+            <div className="max-w-2xl rounded-3xl bg-[#4D9632]/10 p-6">
 
               <p className="whitespace-pre-wrap leading-7">
 

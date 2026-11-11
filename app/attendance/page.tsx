@@ -24,8 +24,10 @@ export default async function AttendancePage() {
 
   if (!student) {
     return (
-      <div className="p-6">
-        Student profile not found.
+      <div className="gps-page">
+        <div className="gps-surface mx-auto max-w-xl p-8 text-center text-gray-500">
+          Student profile not found.
+        </div>
       </div>
     );
   }
@@ -52,13 +54,16 @@ export default async function AttendancePage() {
     });
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">
-        My Attendance
-      </h1>
+    <div className="gps-page">
+      <div className="gps-content max-w-5xl">
+      <div className="gps-surface mb-8 p-6 sm:p-8">
+        <p className="gps-kicker">Learning portal</p>
+        <h1 className="gps-heading mt-2 text-3xl font-bold sm:text-4xl">My Attendance</h1>
+        <p className="mt-2 text-gray-500">Review your class attendance history.</p>
+      </div>
 
       {attendance.length === 0 ? (
-        <div className="mt-6 rounded border p-6 text-center text-gray-500">
+        <div className="rounded-3xl border bg-white p-8 text-center text-gray-500 shadow-sm">
           No attendance records found.
         </div>
       ) : (
@@ -66,9 +71,9 @@ export default async function AttendancePage() {
           {attendance.map((record) => (
             <div
               key={record.id}
-              className="rounded border p-4"
+              className="rounded-3xl border bg-white p-5 shadow-sm"
             >
-              <h2 className="font-semibold text-lg">
+              <h2 className="text-lg font-semibold text-[#113b2b]">
                 {record.session.course.title}
               </h2>
 
@@ -114,6 +119,7 @@ export default async function AttendancePage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default async function AdminCoursesPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -86,7 +86,7 @@ export default async function AdminCoursesPage() {
         <div className="flex gap-3">
         <Link
           href="/admin/courses/new"
-          className="flex items-center gap-2 rounded-xl bg-[#7AAACD] px-5 py-3 text-white transition hover:opacity-90"
+          className="flex items-center gap-2 rounded-xl bg-[#4D9632] px-5 py-3 text-white transition hover:opacity-90"
         >
           <Plus className="h-5 w-5" />
           New Course
@@ -110,7 +110,7 @@ export default async function AdminCoursesPage() {
           title="Courses"
           value={String(courses.length)}
           icon={
-            <FolderOpen className="h-5 w-5 text-[#7AAACD]" />
+            <FolderOpen className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -126,7 +126,7 @@ export default async function AdminCoursesPage() {
           title="Sessions"
           value={String(totalSessions)}
           icon={
-            <CalendarDays className="h-5 w-5 text-[#7AAACD]" />
+            <CalendarDays className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -134,7 +134,7 @@ export default async function AdminCoursesPage() {
           title="Teachers"
           value={String(totalTeachers)}
           icon={
-            <Users className="h-5 w-5 text-[#7AAACD]" />
+            <Users className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -156,7 +156,7 @@ export default async function AdminCoursesPage() {
 
           <Link
             href="/admin/courses/new"
-            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#7AAACD] px-5 py-3 text-white"
+            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#4D9632] px-5 py-3 text-white"
           >
             <Plus className="h-5 w-5" />
             Create Course
@@ -179,9 +179,9 @@ export default async function AdminCoursesPage() {
 
                 <div className="flex items-center gap-4">
 
-                  <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
+                  <div className="rounded-2xl bg-[#4D9632]/10 p-3">
 
-                    <GraduationCap className="h-7 w-7 text-[#7AAACD]" />
+                    <GraduationCap className="h-7 w-7 text-[#4D9632]" />
 
                   </div>
 
@@ -274,7 +274,7 @@ export default async function AdminCoursesPage() {
 
                 <Link
                   href={`/admin/courses/${course.id}`}
-                  className="rounded-xl bg-[#7AAACD] px-5 py-2 text-white transition hover:opacity-90"
+                  className="rounded-xl bg-[#4D9632] px-5 py-2 text-white transition hover:opacity-90"
                 >
                   Manage Course
                 </Link>

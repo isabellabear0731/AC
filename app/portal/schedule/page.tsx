@@ -159,8 +159,8 @@ export default async function PortalSchedulePage() {
 
                   <div className="flex items-center gap-4">
 
-                    <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
-                      <GraduationCap className="h-7 w-7 text-[#7AAACD]" />
+                    <div className="rounded-2xl bg-[#4D9632]/10 p-3">
+                      <GraduationCap className="h-7 w-7 text-[#4D9632]" />
                     </div>
 
                     <div>

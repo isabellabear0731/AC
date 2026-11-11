@@ -13,7 +13,7 @@ export default function StudentSelector() {
   }
 
   return (
-    <div className="rounded-2xl border bg-white p-4">
+    <div className="rounded-2xl border border-[#dce7d5] bg-[#f8fbf5] p-3 shadow-sm">
 
       <label className="block text-sm font-medium text-gray-600">
         Current Child

@@ -112,7 +112,7 @@ export default async function PortalMaterialsPage() {
           title="Courses"
           value={registrations.length}
           icon={
-            <GraduationCap className="h-5 w-5 text-[#7AAACD]" />
+            <GraduationCap className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -120,7 +120,7 @@ export default async function PortalMaterialsPage() {
           title="Resources"
           value={totalResources}
           icon={
-            <BookOpen className="h-5 w-5 text-[#7AAACD]" />
+            <BookOpen className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -128,7 +128,7 @@ export default async function PortalMaterialsPage() {
           title="Teachers"
           value={teacherCount}
           icon={
-            <User className="h-5 w-5 text-[#7AAACD]" />
+            <User className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -164,9 +164,9 @@ export default async function PortalMaterialsPage() {
 
                   <div className="flex items-center gap-4">
 
-                    <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
+                    <div className="rounded-2xl bg-[#4D9632]/10 p-3">
 
-                      <GraduationCap className="h-7 w-7 text-[#7AAACD]" />
+                      <GraduationCap className="h-7 w-7 text-[#4D9632]" />
 
                     </div>
 
@@ -227,7 +227,7 @@ export default async function PortalMaterialsPage() {
 
           <div className="flex items-center gap-3">
 
-            <div className="flex items-center gap-2 rounded-full bg-[#EBEBCF] px-3 py-1 text-xs font-semibold">
+            <div className="flex items-center gap-2 rounded-full bg-[#EFF6E8] px-3 py-1 text-xs font-semibold">
 
               <FileText className="h-4 w-4" />
 
@@ -272,7 +272,7 @@ export default async function PortalMaterialsPage() {
           <Link
             href={resource.fileUrl}
             target="_blank"
-            className="flex items-center gap-2 rounded-xl bg-[#7AAACD] px-4 py-2 text-white transition hover:opacity-90"
+            className="flex items-center gap-2 rounded-xl bg-[#4D9632] px-4 py-2 text-white transition hover:opacity-90"
           >
 
             <ExternalLink className="h-4 w-4" />

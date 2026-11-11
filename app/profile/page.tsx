@@ -16,14 +16,14 @@ export default async function AdultProfilePage() {
   }
 
   return (
-    <div className="min-h-screen p-8" style={{ background: "#F8F8F3" }}>
+    <div className="min-h-screen p-8" style={{ background: "#F8F8F1" }}>
       <div className="mx-auto max-w-2xl rounded-3xl border bg-white p-10 text-center shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-wide text-[#7AAACD]">My Profile</p>
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#4D9632]">My Profile</p>
         <h1 className="mt-3 text-3xl font-bold text-gray-800">Coming Soon</h1>
         <p className="mt-4 text-gray-600">
           Profile editing is not available in the current portal release. Your account and learning records remain available.
         </p>
-        <Link href="/dashboard/adult" className="mt-8 inline-block rounded-xl bg-[#7AAACD] px-5 py-3 text-white hover:opacity-90">
+        <Link href="/dashboard/adult" className="mt-8 inline-block rounded-xl bg-[#4D9632] px-5 py-3 text-white hover:opacity-90">
           Back to Dashboard
         </Link>
       </div>

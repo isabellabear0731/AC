@@ -75,11 +75,11 @@ export default async function SessionPage({
     });
 
     return (
-      <div className="min-h-screen p-8" style={{ background: "#F8F8F3" }}>
+      <div className="min-h-screen p-8" style={{ background: "#F8F8F1" }}>
         <div className="mx-auto max-w-xl rounded-3xl border bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold">Attendance is temporarily unavailable</h1>
           <p className="mt-3 text-gray-500">We could not load this teaching session. Please try again shortly.</p>
-          <Link href="/dashboard/teacher" className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-5 py-3 text-white">Back to Dashboard</Link>
+          <Link href="/dashboard/teacher" className="mt-6 inline-block rounded-xl bg-[#4D9632] px-5 py-3 text-white">Back to Dashboard</Link>
         </div>
       </div>
     );
@@ -131,7 +131,7 @@ export default async function SessionPage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
 
@@ -556,7 +556,7 @@ export default async function SessionPage({
 
 <Link
 href={`/admin/sessions/${session.id}/materials`}
-className="rounded-xl bg-[#7AAACD] px-5 py-2 text-white transition hover:opacity-90"
+className="rounded-xl bg-[#4D9632] px-5 py-2 text-white transition hover:opacity-90"
 >
 Manage Materials
 </Link>
@@ -620,7 +620,7 @@ className="rounded-xl border bg-white px-5 py-3 hover:bg-gray-50"
 
 <Link
 href="/dashboard/admin"
-className="rounded-xl bg-[#7AAACD] px-5 py-3 text-white transition hover:opacity-90"
+className="rounded-xl bg-[#4D9632] px-5 py-3 text-white transition hover:opacity-90"
 >
 Dashboard
 </Link>

@@ -110,7 +110,7 @@ export default function LoginForm({
         <div className="mt-6 space-y-3 text-center text-sm">
           <Link
             href="/forgot-password"
-            className="block text-gray-500 hover:text-[#7AAACD]"
+            className="block text-gray-500 hover:text-[#4D9632]"
           >
             Forgot your password?
           </Link>
@@ -118,7 +118,7 @@ export default function LoginForm({
             Need an account?{" "}
             <Link
               href="/signup"
-              className="font-medium text-[#7AAACD]"
+              className="font-medium text-[#4D9632]"
             >
               Sign up
             </Link>
@@ -169,7 +169,7 @@ export default function LoginForm({
               setEmail(event.target.value)
             }
             required
-            className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition focus:border-[#7AAACD] focus:bg-white"
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition focus:border-[#4D9632] focus:bg-white"
           />
         </div>
 
@@ -190,7 +190,7 @@ export default function LoginForm({
               setPassword(event.target.value)
             }
             required
-            className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition focus:border-[#7AAACD] focus:bg-white"
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition focus:border-[#4D9632] focus:bg-white"
           />
         </div>
 
@@ -199,7 +199,7 @@ export default function LoginForm({
           disabled={isSubmitting}
           className="w-full rounded-xl py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
           style={{
-            backgroundColor: "#7AAACD",
+            backgroundColor: "#4D9632",
           }}
         >
           {isSubmitting ? "Signing In..." : "Sign In"}

@@ -30,7 +30,7 @@ export default function CalendarView({
   events: CalendarEvent[];
 }) {
   return (
-    <div className="h-[700px]">
+    <div className="h-[560px] rounded-3xl bg-white p-3 sm:h-[700px] sm:p-5">
       <Calendar
         localizer={localizer}
         events={events}

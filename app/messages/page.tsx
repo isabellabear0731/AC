@@ -46,7 +46,7 @@ export default async function MessagesPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -67,7 +67,7 @@ export default async function MessagesPage() {
 
         <Link
           href="/messages/new"
-          className="flex items-center gap-2 rounded-xl bg-[#7AAACD] px-5 py-3 text-white transition hover:opacity-90"
+          className="flex items-center gap-2 rounded-xl bg-[#4D9632] px-5 py-3 text-white transition hover:opacity-90"
         >
           <Plus className="h-5 w-5" />
           New Message
@@ -83,7 +83,7 @@ export default async function MessagesPage() {
           title="Messages"
           value={String(messages.length)}
           icon={
-            <MessageCircle className="h-5 w-5 text-[#7AAACD]" />
+            <MessageCircle className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -137,9 +137,9 @@ export default async function MessagesPage() {
 
                 <div className="flex items-center gap-4">
 
-                  <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
+                  <div className="rounded-2xl bg-[#4D9632]/10 p-3">
 
-                    <User className="h-7 w-7 text-[#7AAACD]" />
+                    <User className="h-7 w-7 text-[#4D9632]" />
 
                   </div>
 
@@ -184,7 +184,7 @@ export default async function MessagesPage() {
                   })}
                 </span>
 
-                <span className="text-sm font-medium text-[#7AAACD]">
+                <span className="text-sm font-medium text-[#4D9632]">
                   Open →
                 </span>
 

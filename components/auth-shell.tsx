@@ -1,4 +1,4 @@
-import Link from "next/link";
+import BrandLogo from "@/components/brand-logo";
 
 export default function AuthShell({
   title,
@@ -12,26 +12,16 @@ export default function AuthShell({
   footer?: React.ReactNode;
 }) {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center px-6 py-10"
-      style={{
-        backgroundColor: "#EBEBCF",
-      }}
-    >
-      <div className="w-full max-w-md rounded-3xl bg-white p-10 shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center px-5 py-10">
+      <div className="w-full max-w-md rounded-[2rem] border border-white/80 bg-white/95 p-7 shadow-[0_20px_55px_rgba(29,70,36,0.14)] backdrop-blur sm:p-10">
         <div className="mb-8 text-center">
-          <Link
-            href="/"
-            aria-label="The Gifted People Services home"
-            className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-bold text-white"
-            style={{
-              backgroundColor: "#7AAACD",
-            }}
-          >
-            GC
-          </Link>
+          <BrandLogo className="mx-auto mb-5" />
 
-          <h1 className="text-3xl font-bold text-gray-800">
+          <div className="mb-6 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#4d9632] before:h-px before:flex-1 before:bg-[#dce7d5] after:h-px after:flex-1 after:bg-[#dce7d5]">
+            <span>♥</span>
+          </div>
+
+          <h1 className="gps-heading text-3xl font-bold">
             {title}
           </h1>
 
@@ -44,8 +34,8 @@ export default function AuthShell({
 
         {footer}
 
-        <div className="mt-10 border-t pt-5 text-center text-xs text-gray-400">
-          © 2026 The Gifted People Services
+        <div className="mt-10 border-t border-[#dce7d5] pt-5 text-center text-xs text-gray-400">
+          © 2026 Gifted People Services
         </div>
       </div>
     </div>

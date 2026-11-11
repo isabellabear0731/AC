@@ -1,6 +1,6 @@
 export const roleTheme = {
-    admin: "#D0CCCD",
-    parent: "#A0BC91",
-    teacher: "#FAD78A",
-    student: "#A6C2D5",
+    admin: "#dceccf",
+    parent: "#cce4bb",
+    teacher: "#d5e9bf",
+    student: "#d9e8f7",
   };

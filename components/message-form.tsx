@@ -49,7 +49,7 @@ export default function MessageForm({
   return (
     <div className="space-y-4">
       <select
-        className="w-full rounded border p-2"
+        className="w-full rounded-xl border p-3"
         value={receiverId}
         onChange={(e) =>
           setReceiverId(e.target.value)
@@ -71,7 +71,7 @@ export default function MessageForm({
       </select>
 
       <textarea
-        className="w-full rounded border p-2"
+        className="w-full rounded-xl border p-3"
         rows={6}
         value={content}
         onChange={(e) =>
@@ -82,7 +82,7 @@ export default function MessageForm({
 
       <button
         onClick={sendMessage}
-        className="rounded bg-blue-600 px-4 py-2 text-white"
+        className="rounded-xl bg-[#4d9632] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#36721f]"
       >
         Send Message
       </button>

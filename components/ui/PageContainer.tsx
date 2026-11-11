@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import AppFooter from "@/components/app-footer";
 
 export default function PageContainer({
   children,
@@ -6,15 +7,11 @@ export default function PageContainer({
   children: ReactNode;
 }) {
   return (
-    <div
-      className="min-h-screen p-8"
-      style={{
-        background: "#F8F8F3",
-      }}
-    >
-      <div className="mx-auto max-w-7xl">
+    <div className="gps-page">
+      <div className="gps-content">
         {children}
       </div>
+      <AppFooter />
     </div>
   );
 }

@@ -80,7 +80,7 @@ export default function UserCreateForm() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mx-auto max-w-3xl rounded-3xl border bg-white p-8 shadow-sm">
@@ -233,7 +233,7 @@ export default function UserCreateForm() {
           )}
 
           <button
-            className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white"
+            className="rounded-xl bg-[#4D9632] px-6 py-3 text-white"
           >
             Create User
           </button>

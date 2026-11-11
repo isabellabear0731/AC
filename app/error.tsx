@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { TriangleAlert } from "lucide-react";
+import BrandLogo from "@/components/brand-logo";
 
 export default function Error({
   error,
@@ -16,10 +17,12 @@ export default function Error({
     <div
       className="flex min-h-screen items-center justify-center p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
-      <div className="w-full max-w-lg rounded-3xl border bg-white p-12 text-center shadow-sm">
+      <div className="w-full max-w-lg rounded-[2rem] border border-[#dce7d5] bg-white p-8 text-center shadow-[0_20px_55px_rgba(29,70,36,0.14)] sm:p-12">
+
+        <BrandLogo compact className="mx-auto mb-8" />
 
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
 
@@ -27,7 +30,7 @@ export default function Error({
 
         </div>
 
-        <h1 className="mt-8 text-4xl font-bold">
+        <h1 className="gps-heading mt-8 text-4xl font-bold">
           We&apos;re Sorry!
         </h1>
 
@@ -41,7 +44,7 @@ export default function Error({
 
           <button
             onClick={() => reset()}
-            className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white transition hover:opacity-90"
+            className="rounded-xl bg-[#4D9632] px-6 py-3 text-white transition hover:opacity-90"
           >
             Try Again
           </button>

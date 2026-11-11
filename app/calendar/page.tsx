@@ -74,7 +74,7 @@ export default async function CalendarPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -120,7 +120,7 @@ export default async function CalendarPage() {
             upcomingSessions.length
           )}
           icon={
-            <GraduationCap className="h-5 w-5 text-[#7AAACD]" />
+            <GraduationCap className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -138,7 +138,7 @@ export default async function CalendarPage() {
             }).length
           )}
           icon={
-            <CalendarDays className="h-5 w-5 text-[#7AAACD]" />
+            <CalendarDays className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -152,7 +152,7 @@ export default async function CalendarPage() {
             ).size
           )}
           icon={
-            <MapPin className="h-5 w-5 text-[#7AAACD]" />
+            <MapPin className="h-5 w-5 text-[#4D9632]" />
           }
         />
 

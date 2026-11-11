@@ -21,7 +21,7 @@ export default async function AuditLogPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -105,7 +105,7 @@ export default async function AuditLogPage() {
 
           <thead
             style={{
-              background: "#EBEBCF",
+              background: "#EFF6E8",
             }}
           >
             <tr>

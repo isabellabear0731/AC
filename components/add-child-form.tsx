@@ -179,7 +179,7 @@ export default function AddChildForm() {
       <button
         onClick={submit}
         disabled={loading}
-        className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white disabled:opacity-50"
+        className="rounded-xl bg-[#4D9632] px-6 py-3 text-white disabled:opacity-50"
       >
         {loading
           ? "Creating..."

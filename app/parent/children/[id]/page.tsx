@@ -108,7 +108,7 @@ export default async function ChildPage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -151,7 +151,7 @@ export default async function ChildPage({
             upcomingRegistrations.length
           )}
           icon={
-            <GraduationCap className="h-5 w-5 text-[#7AAACD]" />
+            <GraduationCap className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -159,7 +159,7 @@ export default async function ChildPage({
           title="Attendance Rate"
           value={attendanceRate}
           icon={
-            <ClipboardCheck className="h-5 w-5 text-[#7AAACD]" />
+            <ClipboardCheck className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -169,7 +169,7 @@ export default async function ChildPage({
             child.attendance.length
           )}
           icon={
-            <CalendarDays className="h-5 w-5 text-[#7AAACD]" />
+            <CalendarDays className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -217,9 +217,9 @@ export default async function ChildPage({
     
                         <div className="flex items-center gap-4">
     
-                          <div className="rounded-2xl bg-[#7AAACD]/10 p-3">
+                          <div className="rounded-2xl bg-[#4D9632]/10 p-3">
     
-                            <GraduationCap className="h-7 w-7 text-[#7AAACD]" />
+                            <GraduationCap className="h-7 w-7 text-[#4D9632]" />
     
                           </div>
     

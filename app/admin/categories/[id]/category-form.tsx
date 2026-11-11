@@ -61,7 +61,7 @@ export default function CategoryForm({
   }
 
   return (
-    <div className="min-h-screen p-8" style={{ background: "#F8F8F3" }}>
+    <div className="min-h-screen p-8" style={{ background: "#F8F8F1" }}>
       <div className="mx-auto max-w-xl">
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -86,7 +86,7 @@ export default function CategoryForm({
               id="category-name"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className="mt-2 w-full rounded-xl border p-3 focus:border-[#7AAACD] focus:outline-none"
+              className="mt-2 w-full rounded-xl border p-3 focus:border-[#4D9632] focus:outline-none"
               required
               maxLength={100}
             />
@@ -117,7 +117,7 @@ export default function CategoryForm({
               type="number"
               value={sortOrder}
               onChange={(event) => setSortOrder(event.target.value)}
-              className="mt-2 w-full rounded-xl border p-3 focus:border-[#7AAACD] focus:outline-none"
+              className="mt-2 w-full rounded-xl border p-3 focus:border-[#4D9632] focus:outline-none"
               required
             />
           </div>
@@ -143,7 +143,7 @@ export default function CategoryForm({
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-xl bg-[#4D9632] px-6 py-3 text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSaving ? "Saving..." : "Save Changes"}
             </button>

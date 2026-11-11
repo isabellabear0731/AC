@@ -55,7 +55,7 @@ export default async function RegistrationPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -127,7 +127,7 @@ export default async function RegistrationPage() {
 
           <thead
             style={{
-              background: "#EBEBCF",
+              background: "#EFF6E8",
             }}
           >
             <tr>
@@ -216,7 +216,7 @@ export default async function RegistrationPage() {
 
                   <Link
                     href={`/admin/registrations/${reg.id}`}
-                    className="rounded-xl bg-[#7AAACD] px-4 py-2 text-white hover:opacity-90"
+                    className="rounded-xl bg-[#4D9632] px-4 py-2 text-white hover:opacity-90"
                   >
                     Review
                   </Link>

@@ -287,7 +287,7 @@ export default function UploadForm({
       <button
         type="submit"
         disabled={uploading}
-        className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90 disabled:opacity-50"
+        className="rounded-xl bg-[#4D9632] px-6 py-3 text-white hover:opacity-90 disabled:opacity-50"
       >
         {uploading
           ? "Uploading..."

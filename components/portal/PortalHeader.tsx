@@ -8,13 +8,14 @@ export default function PortalHeader({
   subtitle?: string;
 }) {
   return (
-    <div className="mb-8">
+    <div className="gps-surface mb-8 p-5 sm:p-7">
 
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
         <div>
 
-          <h1 className="text-4xl font-bold">
+          <p className="gps-kicker">Learning portal</p>
+          <h1 className="gps-heading mt-2 text-3xl font-bold sm:text-4xl">
             {title}
           </h1>
 

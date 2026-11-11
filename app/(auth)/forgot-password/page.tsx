@@ -50,7 +50,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-6 text-center">
           <Link
             href="/login"
-            className="text-sm text-gray-500 hover:text-[#7AAACD]"
+            className="text-sm text-gray-500 hover:text-[#4D9632]"
           >
             Back to sign in
           </Link>
@@ -96,7 +96,7 @@ export default function ForgotPasswordPage() {
               setEmail(event.target.value)
             }
             required
-            className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition focus:border-[#7AAACD] focus:bg-white"
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition focus:border-[#4D9632] focus:bg-white"
           />
         </div>
 
@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
           disabled={isSubmitting}
           className="w-full rounded-xl py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
           style={{
-            backgroundColor: "#7AAACD",
+            backgroundColor: "#4D9632",
           }}
         >
           {isSubmitting ? "Sending..." : "Send Reset Link"}

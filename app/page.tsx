@@ -5,39 +5,29 @@ import {
   Users,
   BookOpen,
 } from "lucide-react";
+import BrandLogo from "@/components/brand-logo";
 
 export default function Home() {
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        background: "#F8F8F3",
-      }}
-    >
+    <div className="min-h-screen">
       {/* Navigation */}
 
-      <header className="border-b bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
+      <header className="border-b border-[#dce7d5] bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-8 sm:py-4">
 
-          <div>
-
-            <h1 className="text-2xl font-bold text-[#7AAACD]">
-              Gifted People Services
-            </h1>
-
-          </div>
+          <BrandLogo compact />
 
           <nav className="hidden items-center gap-8 text-sm font-medium text-gray-600 md:flex">
 
-            <a href="#programs" className="hover:text-[#7AAACD]">
+            <a href="#programs" className="hover:text-[#4D9632]">
               Programs
             </a>
 
-            <a href="#about" className="hover:text-[#7AAACD]">
+            <a href="#about" className="hover:text-[#4D9632]">
               About
             </a>
 
-            <a href="#contact" className="hover:text-[#7AAACD]">
+            <a href="#contact" className="hover:text-[#4D9632]">
               Contact
             </a>
 
@@ -45,7 +35,7 @@ export default function Home() {
 
           <Link
             href="/login"
-            className="rounded-xl bg-[#7AAACD] px-5 py-2 text-white transition hover:opacity-90"
+            className="gps-button-primary rounded-xl px-5 py-2 text-sm font-semibold transition"
           >
             Sign In
           </Link>
@@ -55,18 +45,18 @@ export default function Home() {
 
       {/* Hero */}
 
-      <section className="mx-auto flex max-w-7xl flex-col items-center px-8 py-24 text-center">
+      <section className="mx-auto flex max-w-7xl flex-col items-center px-5 py-20 text-center sm:px-8 sm:py-24">
 
-        <span className="rounded-full bg-[#EBEBCF] px-5 py-2 text-sm font-semibold text-gray-700">
+        <span className="rounded-full bg-[#EFF6E8] px-5 py-2 text-sm font-semibold text-gray-700">
 
           Personalized Education • Family Portal
 
         </span>
 
-        <h2 className="mt-8 max-w-4xl text-6xl font-bold leading-tight">
+        <h2 className="gps-heading mt-8 max-w-4xl text-5xl font-bold leading-tight sm:text-6xl">
 
           Empowering
-          <span className="text-[#7AAACD]">
+          <span className="text-[#4D9632]">
             {" "}Gifted Learners
           </span>
 
@@ -89,7 +79,7 @@ export default function Home() {
 
           <Link
             href="/login"
-            className="flex items-center gap-2 rounded-2xl bg-[#7AAACD] px-8 py-4 text-lg font-medium text-white transition hover:opacity-90"
+            className="gps-button-primary flex items-center gap-2 rounded-2xl px-8 py-4 text-lg font-medium transition"
           >
             Sign In
 
@@ -99,7 +89,7 @@ export default function Home() {
 
           <Link
             href="/signup"
-            className="rounded-2xl border bg-white px-8 py-4 text-lg font-medium transition hover:bg-gray-50"
+            className="gps-button-secondary rounded-2xl px-8 py-4 text-lg font-medium transition hover:bg-[#eff6e8]"
           >
             Create Account
           </Link>
@@ -134,7 +124,7 @@ export default function Home() {
 
           <FeatureCard
             icon={
-              <GraduationCap className="h-8 w-8 text-[#7AAACD]" />
+              <GraduationCap className="h-8 w-8 text-[#4D9632]" />
             }
             title="Personalized Learning"
             description="Explore enrichment programs tailored to each student's interests, strengths, and learning goals."
@@ -142,7 +132,7 @@ export default function Home() {
 
           <FeatureCard
             icon={
-              <Users className="h-8 w-8 text-[#7AAACD]" />
+              <Users className="h-8 w-8 text-[#4D9632]" />
             }
             title="Family Portal"
             description="Register for courses, view schedules, track attendance, access learning materials, and manage payments in one place."
@@ -150,7 +140,7 @@ export default function Home() {
 
           <FeatureCard
             icon={
-              <BookOpen className="h-8 w-8 text-[#7AAACD]" />
+              <BookOpen className="h-8 w-8 text-[#4D9632]" />
             }
             title="Teacher Collaboration"
             description="Teachers can manage attendance, upload resources, communicate with families, and support student success."
@@ -201,7 +191,7 @@ export default function Home() {
         className="mx-auto max-w-6xl px-8 py-24"
       >
 
-        <div className="rounded-[32px] bg-[#7AAACD] px-10 py-16 text-center text-white shadow-lg">
+        <div className="rounded-[32px] bg-gradient-to-br from-[#36721f] to-[#6bab45] px-6 py-14 text-center text-white shadow-lg sm:px-10 sm:py-16">
 
           <h2 className="text-4xl font-bold">
 
@@ -223,7 +213,7 @@ export default function Home() {
 
             <Link
               href="/signup"
-              className="rounded-2xl bg-white px-8 py-4 font-semibold text-[#7AAACD] transition hover:bg-gray-100"
+              className="rounded-2xl bg-white px-8 py-4 font-semibold text-[#36721f] transition hover:bg-[#eff6e8]"
             >
               Create Account
             </Link>
@@ -254,9 +244,7 @@ export default function Home() {
 
             <div>
 
-              <h3 className="text-2xl font-bold text-[#7AAACD]">
-                Gifted People Services
-              </h3>
+              <BrandLogo />
 
               <p className="mt-4 leading-7 text-gray-600">
                 Helping gifted learners discover their
@@ -277,14 +265,14 @@ export default function Home() {
 
                 <Link
                   href="/login"
-                  className="hover:text-[#7AAACD]"
+                  className="hover:text-[#4D9632]"
                 >
                   Sign In
                 </Link>
 
                 <Link
                   href="/signup"
-                  className="hover:text-[#7AAACD]"
+                  className="hover:text-[#4D9632]"
                 >
                   Create Account
                 </Link>
@@ -346,7 +334,7 @@ function FeatureCard({
   return (
     <div className="rounded-3xl border bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
 
-      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#7AAACD]/10">
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#4D9632]/10">
 
         {icon}
 
@@ -372,9 +360,9 @@ function StatCard({
   label: string;
 }) {
   return (
-    <div className="rounded-3xl border bg-[#F8F8F3] p-8 shadow-sm">
+    <div className="rounded-3xl border bg-[#F8F8F1] p-8 shadow-sm">
 
-      <div className="text-5xl font-bold text-[#7AAACD]">
+      <div className="text-5xl font-bold text-[#4D9632]">
 
         {value}
 
@@ -389,4 +377,3 @@ function StatCard({
     </div>
   );
 }
-

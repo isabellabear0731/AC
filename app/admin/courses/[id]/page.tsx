@@ -57,7 +57,7 @@ export default async function CourseDetailPage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -335,7 +335,7 @@ export default async function CourseDetailPage({
           </div>
   
           <button
-            className="rounded-xl bg-[#7AAACD] px-6 py-3 text-white hover:opacity-90"
+            className="rounded-xl bg-[#4D9632] px-6 py-3 text-white hover:opacity-90"
             type="submit"
           >
             Add Session
@@ -427,7 +427,7 @@ export default async function CourseDetailPage({
 
                   <Link
                     href={`/admin/sessions/${session.id}`}
-                    className="rounded-xl bg-[#7AAACD] px-5 py-2 text-white hover:opacity-90"
+                    className="rounded-xl bg-[#4D9632] px-5 py-2 text-white hover:opacity-90"
                   >
                     Manage Session
                   </Link>
@@ -551,7 +551,7 @@ export default async function CourseDetailPage({
                   </select>
 
                   <button
-                    className="rounded-xl bg-[#7AAACD] px-5 py-3 text-white"
+                    className="rounded-xl bg-[#4D9632] px-5 py-3 text-white"
                   >
                     Save Teacher
                   </button>

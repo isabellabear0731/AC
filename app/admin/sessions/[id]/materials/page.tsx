@@ -62,11 +62,11 @@ export default async function MaterialsPage({
     });
 
     return (
-      <div className="min-h-screen p-8" style={{ background: "#F8F8F3" }}>
+      <div className="min-h-screen p-8" style={{ background: "#F8F8F1" }}>
         <div className="mx-auto max-w-xl rounded-3xl border bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold">Teaching resources are temporarily unavailable</h1>
           <p className="mt-3 text-gray-500">We could not load this teaching session. Please try again shortly.</p>
-          <Link href="/dashboard/teacher" className="mt-6 inline-block rounded-xl bg-[#7AAACD] px-5 py-3 text-white">Back to Dashboard</Link>
+          <Link href="/dashboard/teacher" className="mt-6 inline-block rounded-xl bg-[#4D9632] px-5 py-3 text-white">Back to Dashboard</Link>
         </div>
       </div>
     );
@@ -87,7 +87,7 @@ export default async function MaterialsPage({
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mb-8 flex items-center justify-between">
@@ -208,7 +208,7 @@ export default async function MaterialsPage({
                     <a
                       href={resource.fileUrl}
                       target="_blank"
-                      className="rounded-xl bg-[#7AAACD] px-4 py-2 text-white"
+                      className="rounded-xl bg-[#4D9632] px-4 py-2 text-white"
                     >
                       Open
                     </a>

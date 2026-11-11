@@ -21,13 +21,13 @@ export default async function AddChildPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-[#7AAACD]">
+            <p className="text-sm font-medium text-[#4D9632]">
               Parent Portal
             </p>
 

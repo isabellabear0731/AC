@@ -109,7 +109,7 @@ export default async function PortalCoursesPage() {
                   style={{
                     background:
                       course.category.color ??
-                      "#7AAACD",
+                      "#4D9632",
                   }}
                 >
                   {course.category.name}
@@ -303,7 +303,7 @@ export default async function PortalCoursesPage() {
                           {canRegister && (
                             <Link
                               href={`/portal/register/${sessionItem.id}`}
-                              className="rounded-xl bg-[#7AAACD] px-5 py-3 text-white transition hover:opacity-90"
+                              className="rounded-xl bg-[#4D9632] px-5 py-3 text-white transition hover:opacity-90"
                             >
                               Register
                             </Link>

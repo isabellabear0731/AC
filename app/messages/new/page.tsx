@@ -30,7 +30,7 @@ export default async function NewMessagePage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       {/* Header */}
@@ -55,7 +55,7 @@ export default async function NewMessagePage() {
           title="Recipients"
           value={String(users.length)}
           icon={
-            <Users className="h-5 w-5 text-[#7AAACD]" />
+            <Users className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -63,7 +63,7 @@ export default async function NewMessagePage() {
           title="Communication"
           value="Portal"
           icon={
-            <MessageCircle className="h-5 w-5 text-[#7AAACD]" />
+            <MessageCircle className="h-5 w-5 text-[#4D9632]" />
           }
         />
 
@@ -71,7 +71,7 @@ export default async function NewMessagePage() {
           title="Replies"
           value="Coming Soon"
           icon={
-            <Pencil className="h-5 w-5 text-[#7AAACD]" />
+            <Pencil className="h-5 w-5 text-[#4D9632]" />
           }
         />
 

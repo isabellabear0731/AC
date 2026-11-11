@@ -60,7 +60,7 @@ export default async function StudentMaterialsPage() {
     <div
       className="min-h-screen p-8"
       style={{
-        background: "#F8F8F3",
+        background: "#F8F8F1",
       }}
     >
       <div className="mb-8 flex items-center justify-between">
@@ -152,7 +152,7 @@ export default async function StudentMaterialsPage() {
                         <a
                           href={resource.fileUrl}
                           target="_blank"
-                          className="rounded-xl bg-[#7AAACD] px-4 py-2 text-white"
+                          className="rounded-xl bg-[#4D9632] px-4 py-2 text-white"
                         >
                           Open
                         </a>
